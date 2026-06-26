@@ -1,0 +1,497 @@
+/* ===========================
+   SOFT LAW OFFICE THEME
+=========================== */
+
+:root {
+  --primary: #556070;
+  --primary-dark: #475362;
+
+  --secondary: #c2a77d;
+
+  --bg: #f8f9fb;
+
+  --card: #ffffff;
+
+  --text: #374151;
+
+  --text-light: #7a818b;
+
+  --border: #e4e7ec;
+
+  --success: #7bb58d;
+
+  --warning: #d7b26d;
+
+  --danger: #d98c8c;
+
+  --radius: 16px;
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+
+  background: var(--bg);
+
+  color: var(--text);
+}
+
+/* NAVBAR */
+
+.navbar {
+  background: rgba(255, 255, 255, 0.85);
+
+  backdrop-filter: blur(12px);
+
+  padding: 10px 120px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  border-bottom: 1px solid var(--border);
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 1000;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#hakkimizda,
+#ekibimiz {
+  scroll-margin-top: 120px;
+}
+
+#hizmetler {
+  scroll-margin-top: 80px;
+}
+
+/* LEFT */
+
+.nav-left {
+  display: flex;
+
+  align-items: center;
+
+  margin-right: 20px;
+}
+
+.nav-left a {
+  text-decoration: none;
+
+  color: var(--primary);
+
+  font-size: 28px;
+
+  font-weight: 700;
+
+  line-height: 0.8;
+}
+
+/* Menü */
+
+.nav-right {
+  display: flex;
+
+  align-items: center;
+
+  width: 100%;
+}
+
+.nav-right ul {
+  margin-left: flex;
+
+  display: flex;
+
+  align-items: center;
+
+  list-style: none;
+
+  gap: 10px;
+
+  flex: 1;
+}
+
+/* Menü linkleri */
+
+.nav-right ul a {
+  color: var(--text-light);
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  padding: 10px 4px;
+
+  transition: 0.25s;
+}
+
+.nav-right ul a:hover {
+  color: var(--primary);
+}
+
+/* Giriş butonu */
+
+.login-btn {
+  margin-left: auto;
+
+  background: var(--secondary);
+
+  text-decoration: none !important;
+
+  color: white !important;
+
+  padding: 5px 10px;
+
+  border-radius: 999px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: 0.25s;
+
+  display: inline-block;
+}
+
+.login-btn:hover {
+  background: #b59a72;
+
+  transform: translateY(-2px);
+}
+
+/* CONTENT */
+
+.container {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  width: 90%;
+
+  padding: 0px 120px;
+
+  margin-top: 40px;
+
+  margin-bottom: 200px;
+}
+
+/* Sol taraf */
+
+.about-left {
+  flex: 4;
+}
+
+.about-left h4 {
+  font-size: 24px;
+
+  margin-bottom: 20px;
+
+  color: var(--primary);
+}
+
+.about-left p {
+  color: var(--text-light);
+
+  line-height: 1.4;
+
+  font-size: 20px;
+}
+
+/* Sağ taraf */
+
+.about-right {
+  flex: 1;
+
+  display: flex;
+
+  justify-content: center;
+}
+
+.about-right img {
+  width: 100%;
+
+  max-width: 400px;
+
+  border-radius: 20px;
+
+  object-fit: cover;
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.footer {
+  color: white;
+  padding: 0px 120px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .about-right {
+    justify-content: center;
+  }
+}
+
+/* Takım alanı */
+
+.team-section {
+  width: 85%;
+
+  margin: 10px auto;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.team-card {
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+
+  background: var(--card);
+
+  padding: 60px;
+
+  border-radius: 0px;
+
+  box-shadow: var(--shadow);
+
+  text-decoration: none;
+
+  color: inherit;
+
+  transition: 0.3s;
+
+  cursor: pointer;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.team-card img {
+  width: 100%;
+
+  max-width: 240px;
+
+  height: 320px;
+
+  object-fit: cover;
+
+  border-radius: 16px;
+
+  margin-bottom: 24px;
+}
+
+.team-card h3 {
+  color: var(--primary);
+
+  margin-bottom: 10px;
+
+  font-size: 22px;
+}
+
+.team-card p {
+  color: var(--text-light);
+
+  line-height: 1.6;
+}
+/* Kart grubu */
+
+.cards {
+  width: 85%;
+
+  margin: 10px auto;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+/* Kart */
+
+.card {
+  flex: 1;
+
+  background: var(--card);
+
+  padding: 32px;
+
+  border-radius: 20px;
+
+  box-shadow: var(--shadow);
+
+  text-align: center;
+
+  transition: 0.3s;
+  height: 70%;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+/* İkon */
+
+.icon {
+  font-size: 60px;
+
+  margin-bottom: 20px;
+}
+
+.card-title {
+  color: var(--primary);
+
+  margin-bottom: 16px;
+}
+
+.card p {
+  color: var(--text-light);
+
+  line-height: 1.8;
+}
+
+/* Telefon-info */
+
+.contact-info {
+  padding: 40px 40px;
+}
+
+.contact-info a {
+  text-decoration: none;
+
+  color: var(--primary);
+
+  font-weight: 700;
+
+  padding: 12px 22px;
+
+  border-radius: 100px;
+
+  background: #eef2f7;
+
+  display: inline-block;
+
+  transition: 0.3s;
+}
+
+.contact-info a:hover {
+  background: var(--secondary);
+
+  color: white;
+}
+
+/* İletişim */
+
+.contact-container {
+  width: 85%;
+
+  max-width: 1400px;
+
+  margin: 80px auto;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 100px;
+}
+
+/* Sol taraf */
+
+.contact-about-left {
+  flex: 1;
+
+  min-width: 280px;
+}
+
+.contact-about-left h2 {
+  color: var(--primary);
+
+  margin-bottom: 20px;
+}
+
+.contact-about-left p {
+  margin-bottom: 12px;
+
+  line-height: 1.8;
+}
+
+/* Sağ taraf */
+
+.map-container {
+  flex: 2;
+}
+
+.map-container iframe {
+  width: 100%;
+
+  height: 400px;
+
+  border: none;
+
+  border-radius: 20px;
+
+  box-shadow: var(--shadow);
+}
+
+/* TABLE */
+
+.table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.table th {
+  color: var(--primary);
+
+  background: #eef2f7;
+}
+
+.table th,
+.table td {
+  padding: 16px;
+
+  border-bottom: 1px solid var(--border);
+}

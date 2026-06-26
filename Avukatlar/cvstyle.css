@@ -1,0 +1,119 @@
+/* ===========================
+   CV SAYFASI
+=========================== */
+
+.cv-container {
+  width: 85%;
+
+  max-width: 1400px;
+
+  margin: 60px auto;
+
+  display: flex;
+
+  gap: 60px;
+
+  align-items: flex-start;
+}
+
+/* Sol taraf */
+
+.cv-left {
+  flex: 1;
+
+  text-align: center;
+}
+
+.cv-left img {
+  width: 100%;
+
+  max-width: 320px;
+
+  height: 420px;
+
+  object-fit: cover;
+
+  border-radius: 20px;
+
+  box-shadow: var(--shadow);
+}
+
+.cv-name {
+  margin-top: 25px;
+
+  color: var(--primary);
+
+  font-size: 32px;
+
+  font-weight: 700;
+}
+
+.cv-title {
+  margin-top: 8px;
+
+  color: var(--secondary);
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+/* Sağ taraf */
+
+.cv-right {
+  flex: 2;
+
+  background: var(--card);
+
+  padding: 40px;
+
+  border-radius: 20px;
+
+  box-shadow: var(--shadow);
+}
+
+.cv-section {
+  margin-bottom: 40px;
+}
+
+.cv-section h2 {
+  color: var(--primary);
+
+  margin-bottom: 16px;
+
+  padding-bottom: 8px;
+
+  border-bottom: 2px solid var(--border);
+}
+
+.cv-section p {
+  color: var(--text-light);
+
+  line-height: 1.9;
+
+  text-align: justify;
+}
+
+/* Bilgi kutuları */
+
+.cv-info {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 18px;
+
+  margin-top: 20px;
+}
+
+.cv-box {
+  background: #eef2f7;
+
+  padding: 16px;
+
+  border-radius: 12px;
+}
+
+.cv-box strong {
+  color: var(--primary);
+}
