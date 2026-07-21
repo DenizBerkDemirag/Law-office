@@ -12,7 +12,8 @@ router.use(isAuthenticated, isLawyer);
 // Büro paneli - tüm davalar
 router.get("/dashboard", async (req, res) => {
   const cases = await Case.find().populate("Uye").sort({ created_at: -1 });
-  res.render("lawyer/dashboard", { cases });
+  const members = await User.find({ Role: "member" }).sort({ Username: 1 });
+  res.render("lawyer/dashboard", { cases, members });
 });
 
 // Müvekkil kaydı
@@ -23,7 +24,8 @@ router.post("/clients", async (req, res) => {
     if (!email || !password || !username) {
       return res.status(400).render("lawyer/dashboard", {
         cases: await Case.find().populate("Uye"),
-        error: "Email, şifre ve kullanıcı adı zorunludur.",
+        members: await User.find({ Role: "member" }),
+        error: "...",
       });
     }
 
@@ -73,7 +75,8 @@ router.post("/cases", async (req, res) => {
     if (!uyeId || !dosyaNo || !konu) {
       return res.status(400).render("lawyer/dashboard", {
         cases: await Case.find().populate("Uye"),
-        error: "Müvekkil, dosya no ve konu zorunludur.",
+        members: await User.find({ Role: "member" }),
+        error: "...",
       });
     }
 
@@ -82,7 +85,8 @@ router.post("/cases", async (req, res) => {
     if (!uye || uye.Role !== "member") {
       return res.status(400).render("lawyer/dashboard", {
         cases: await Case.find().populate("Uye"),
-        error: "Geçersiz müvekkil seçimi.",
+        members: await User.find({ Role: "member" }),
+        error: "...",
       });
     }
 
@@ -99,7 +103,8 @@ router.post("/cases", async (req, res) => {
       // MongoDB unique constraint hatası (dosyaNo zaten var)
       return res.status(400).render("lawyer/dashboard", {
         cases: await Case.find().populate("Uye"),
-        error: "Bu dosya numarası zaten kayıtlı.",
+        members: await User.find({ Role: "member" }),
+        error: "...",
       });
     }
     res.status(500).send("Dava eklenirken bir hata oluştu.");

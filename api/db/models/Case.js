@@ -2,17 +2,19 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema(
   {
-    Uye: {
+    Member: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    dosyaNo: {
+
+    FileNumber: {
       type: String,
       required: true,
       unique: true,
     },
-    Konu: {
+
+    Subject: {
       type: String,
       required: true,
     },
@@ -20,7 +22,8 @@ const schema = new mongoose.Schema(
   {
     versionKey: false,
     timestamps: {
-      createdAt: "created_at",
+      createdAt: "CreatedAt",
+      updatedAt: false,
     },
   },
 );
@@ -28,4 +31,5 @@ const schema = new mongoose.Schema(
 class Case extends mongoose.Model {}
 
 schema.loadClass(Case);
+
 module.exports = mongoose.model("Case", schema);

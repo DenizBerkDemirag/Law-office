@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/CSS/style.css" />
+    <link rel="stylesheet" href="/CSS/style-dashboard.css" />
+    <title>Büro Yönetim Paneli</title>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="nav-left">
+        <a href="/lawyer/dashboard">Altınbaş Avukat Bürosu — Yönetim Paneli</a>
+      </div>
+      <div class="nav-right">
+        <form action="/logout" method="POST" class="inline-form">
+          <button type="submit" class="link-button">Çıkış Yap</button>
+        </form>
+      </div>
+    </div>
+
+    <main class="dashboard-container">
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <section class="dashboard-section">
+        <h2>Yeni Müvekkil Kaydı</h2>
+        <form action="/lawyer/clients" method="POST" class="dashboard-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="username">Kullanıcı Adı</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+            <div class="form-group">
+              <label for="client-email">Email</label>
+              <input type="email" id="client-email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="client-password">Şifre</label>
+              <input type="password" id="client-password" name="password" required minlength="6" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Müvekkil Kaydet</button>
+        </form>
+      </section>
+
+      <section class="dashboard-section">
+        <h2>Yeni Dava Ekle</h2>
+        <form action="/lawyer/cases" method="POST" class="dashboard-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="uyeId">Müvekkil</label>
+              <select id="uyeId" name="uyeId" required>
+                <option value="" disabled selected>Müvekkil seçin</option>
+                <% members.forEach(function(uye) { %>
+                  <option value="<%= uye._id %>"><%= uye.Username || uye.Email %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="dosyaNo">Dosya No</label>
+              <input type="text" id="dosyaNo" name="dosyaNo" required />
+            </div>
+            <div class="form-group">
+              <label for="konu">Konu</label>
+              <input type="text" id="konu" name="konu" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Dava Ekle</button>
+        </form>
+      </section>
+
+      <section class="dashboard-section">
+        <h2>Tüm Davalar</h2>
+
+        <% if (cases.length === 0) { %>
+          <p class="empty-state">Henüz kayıtlı dava bulunmuyor.</p>
+        <% } else { %>
+          <table class="cases-table">
+            <thead>
+              <tr>
+                <th>Dosya No</th>
+                <th>Konu</th>
+                <th>Müvekkil</th>
+                <th>Kayıt Tarihi</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cases.forEach(function(dava) { %>
+                <tr>
+                  <td><%= dava.dosyaNo %></td>
+                  <td><%= dava.Konu %></td>
+                  <td><%= dava.Uye ? (dava.Uye.Username || dava.Uye.Email) : "—" %></td>
+                  <td><%= new Date(dava.created_at).toLocaleDateString('tr-TR') %></td>
+                  <td>
+                    <a href="/lawyer/cases/<%= dava._id %>" class="btn btn-small">Detay</a>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+    </main>
+  </body>
+</html>

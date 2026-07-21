@@ -1,0 +1,249 @@
+/* ============ Genel Ayarlar ============ */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f4f5f7;
+  margin: 0;
+  color: #222;
+}
+
+/* ============ Navbar (paneller için) ============ */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1a2a4a;
+  color: #fff;
+  padding: 16px 32px;
+}
+
+.navbar .nav-left a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.navbar .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.inline-form {
+  display: inline;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.link-button:hover {
+  color: #d0d7e6;
+}
+
+/* ============ Dashboard Container ============ */
+.dashboard-container {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+
+.dashboard-section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-section h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  color: #1a2a4a;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* ============ Formlar ============ */
+.dashboard-form .form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.dashboard-form .form-group {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.dashboard-form input,
+.dashboard-form select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.dashboard-form input:focus,
+.dashboard-form select:focus {
+  outline: none;
+  border-color: #1a2a4a;
+}
+
+/* ============ Butonlar ============ */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary {
+  background-color: #1a2a4a;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #263f6e;
+}
+
+.btn-small {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  background-color: #e8ebf1;
+  color: #1a2a4a;
+}
+
+.btn-small:hover {
+  background-color: #d5dae8;
+}
+
+/* ============ Tablolar ============ */
+.cases-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cases-table th,
+.cases-table td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.cases-table th {
+  background-color: #f8f9fb;
+  font-weight: 600;
+  color: #444;
+}
+
+.cases-table tbody tr:hover {
+  background-color: #f9fafc;
+}
+
+.empty-state {
+  color: #888;
+  font-style: italic;
+  padding: 12px 0;
+}
+
+/* ============ Dava Detay ============ */
+.case-info {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  row-gap: 10px;
+}
+
+.case-info dt {
+  font-weight: 600;
+  color: #555;
+}
+
+.case-info dd {
+  margin: 0;
+}
+
+/* ============ Belge Listesi ============ */
+.document-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.document-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.document-date {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+/* ============ Uyarılar ============ */
+.alert {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.alert-error {
+  background-color: #fdecea;
+  color: #b3261e;
+  border: 1px solid #f5c6c2;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 640px) {
+  .dashboard-form .form-row {
+    flex-direction: column;
+  }
+
+  .case-info {
+    grid-template-columns: 1fr;
+  }
+
+  .cases-table {
+    font-size: 0.8rem;
+  }
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: #f0f2f6;
+}

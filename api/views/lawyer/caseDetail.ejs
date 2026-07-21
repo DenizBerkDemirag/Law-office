@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/CSS/style.css" />
+    <link rel="stylesheet" href="/CSS/style-dashboard.css" />
+    <title>Dava Detayı — <%= dava.dosyaNo %></title>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="nav-left">
+        <a href="/lawyer/dashboard">← Panele Dön</a>
+      </div>
+    </div>
+
+    <main class="dashboard-container">
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <section class="dashboard-section">
+        <h2>Dava Bilgileri</h2>
+        <dl class="case-info">
+          <dt>Dosya No</dt>
+          <dd><%= dava.dosyaNo %></dd>
+
+          <dt>Konu</dt>
+          <dd><%= dava.Konu %></dd>
+
+          <dt>Müvekkil</dt>
+          <dd><%= dava.Uye ? (dava.Uye.Username || dava.Uye.Email) : "—" %></dd>
+
+          <dt>Kayıt Tarihi</dt>
+          <dd><%= new Date(dava.created_at).toLocaleDateString('tr-TR') %></dd>
+        </dl>
+      </section>
+
+      <section class="dashboard-section">
+        <h2>Belgeler</h2>
+
+        <% if (belgeler.length === 0) { %>
+          <p class="empty-state">Bu davaya ait belge bulunmuyor.</p>
+        <% } else { %>
+          <ul class="document-list">
+            <% belgeler.forEach(function(belge) { %>
+              <li>
+                <span><%= belge.FileName %></span>
+                <span class="document-date"><%= new Date(belge.UploadedAt).toLocaleDateString('tr-TR') %></span>
+              </li>
+            <% }); %>
+          </ul>
+        <% } %>
+
+        <form action="/lawyer/cases/<%= dava._id %>/documents" method="POST" enctype="multipart/form-data" class="dashboard-form">
+          <div class="form-group">
+            <label for="file">Belge Yükle (JPEG, PNG, WEBP, PDF)</label>
+            <input type="file" id="file" name="file" accept=".jpg,.jpeg,.png,.webp,.pdf" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Yükle</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

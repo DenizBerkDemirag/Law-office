@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/CSS/style.css" />
+    <link rel="stylesheet" href="/CSS/style-dashboard.css" />
+    <title>Davalarım</title>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="nav-left">
+        <a href="/member/dashboard">Altınbaş Avukat Bürosu — Davalarım</a>
+      </div>
+      <div class="nav-right">
+        <form action="/logout" method="POST" class="inline-form">
+          <button type="submit" class="link-button">Çıkış Yap</button>
+        </form>
+      </div>
+    </div>
+
+    <main class="dashboard-container">
+      <section class="dashboard-section">
+        <h2>Davalarım</h2>
+
+        <% if (cases.length === 0) { %>
+          <p class="empty-state">Şu an kayıtlı bir davanız bulunmuyor.</p>
+        <% } else { %>
+          <table class="cases-table">
+            <thead>
+              <tr>
+                <th>Dosya No</th>
+                <th>Konu</th>
+                <th>Kayıt Tarihi</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cases.forEach(function(dava) { %>
+                <tr class="clickable-row" onclick="window.location='/member/cases/<%= dava._id %>'">
+                  <td><%= dava.dosyaNo %></td>
+                  <td><%= dava.Konu %></td>
+                  <td><%= new Date(dava.created_at).toLocaleDateString('tr-TR') %></td>
+                  <td>
+                    <a href="/member/cases/<%= dava._id %>" class="btn btn-small">Detay</a>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+    </main>
+  </body>
+</html>
