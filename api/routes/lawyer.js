@@ -3,9 +3,9 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const { isAuthenticated, isLawyer } = require("../middleware/auth");
 const upload = require("../middleware/upload");
-const Case = require("../models/Case");
-const Document = require("../models/Document");
-const User = require("../models/User");
+const Case = require("../db/models/Case");
+const Document = require("../db/models/Document");
+const User = require("../db/models/User");
 
 router.use(isAuthenticated, isLawyer);
 

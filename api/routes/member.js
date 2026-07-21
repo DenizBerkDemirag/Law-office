@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { isAuthenticated, isMember } = require("../middleware/auth");
-const Case = require("../models/Case");
+const Case = require("../db/models/Case");
 
 router.use(isAuthenticated, isMember);
 

@@ -60,13 +60,4 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-// Veritabanı bağlantısını kurup sunucuyu ancak başarılı olursa başlat
-const database = new Database();
-
-database.connect(config).then(() => {
-  app.listen(config.PORT, () => {
-    console.log(`Sunucu ${config.PORT} portunda çalışıyor.`);
-  });
-});
-
 module.exports = app;
