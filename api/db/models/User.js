@@ -2,9 +2,16 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema(
   {
-    Username: { type: String, required: true },
-    Email: { type: String, required: true },
+    Email: { type: String, required: true, unique: true },
     Password: { type: String, required: true },
+    Username: {
+      type: String,
+      required: function () {
+        return this.Role === "member";
+      },
+      unique: true,
+      sparse: true, // avukatlar Username girmeyecekse null/undefined çakışmasın diye
+    },
     Role: {
       type: String,
       enum: ["member", "lawyer"],

@@ -6,7 +6,7 @@ const config = require("../config");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", {
-    title: "Deniz",
+    title: "Altınbaş Avukat Bürosu",
     config,
   });
 });

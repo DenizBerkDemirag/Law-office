@@ -1,12 +1,153 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="tr">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/CSS/style.css" />
     <title><%= title %></title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <p><%= JSON.stringify(config) %></p>
+    <div class="navbar">
+      <div class="nav-left">
+        <a href="/">Altınbaş Avukat Bürosu</a>
+      </div>
+
+      <div class="nav-right">
+        <ul>
+          <li><a href="/">Anasayfa</a></li>
+          <li><a href="#ekibimiz">Ekibimiz</a></li>
+          <li><a href="#hizmetler">Hizmetler</a></li>
+          <li><a href="#iletisim">İletişim</a></li>
+        </ul>
+
+        <% if (session && session.userId) { %>
+          <a href="<%= session.role === 'lawyer' ? '/lawyer/dashboard' : '/member/dashboard' %>" class="login-btn">
+            Panelim
+          </a>
+        <% } else { %>
+          <a href="/login" class="login-btn">Giriş Yap</a>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="about-left">
+        <h4>Hakkımızda</h4>
+
+        <p>
+          Altınbaş Avukat Bürosu, müşterilerine en iyi hizmeti sunmak amacıyla
+          2005 yılında kurulmuştur. Deneyimli avukatlar timiyle, her bir
+          müşterinin ihtiyaçlarına özel çözümler üretmeyi amaçlamaktadır. Lorem
+          ipsum dolor sit amet consectetur adipisicing elit. Nam earum quaerat
+          molestiae quo veniam facilis vitae mollitia. Quibusdam modi iusto ea
+          nulla dolor ipsum, voluptatibus, fuga, reiciendis illo dolores
+          mollitia! Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam
+          earum quaerat molestiae quo veniam facilis vitae mollitia. Quibusdam
+          modi iusto ea Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Nam earum quaerat molestiae quo veniam facilis vitae mollitia.
+        </p>
+        <div class="contact-info">
+          <a href="tel:+902121234567">İletişim için: 0212 123 45 67</a>
+        </div>
+      </div>
+      <div class="about-right">
+        <img src="/Fotograflar/resim.png" alt="" />
+      </div>
+      <div class="about-right">
+        <img src="/Fotograflar/resim.png" alt="" />
+      </div>
+    </div>
+
+    <div id="ekibimiz" style="text-align: center; margin: 40px 0">
+      <h4>Ekibimiz</h4>
+    </div>
+
+    <div class="team-section">
+      <a href="/ekip/ahmet-altinbas" class="team-card">
+        <img src="/Fotograflar/resim.png" alt="Av. Ahmet Altınbaş" />
+        <h3>Av. Ahmet Altınbaş</h3>
+        <p>Kurucu ve Baş Avukat</p>
+      </a>
+
+      <a href="/ekip/elif-yilmaz" class="team-card">
+        <img src="/Fotograflar/resim.png" alt="Av. Elif Yılmaz" />
+        <h3>Av. Elif Yılmaz</h3>
+        <p>Ceza Hukuku Uzmanı</p>
+      </a>
+
+      <a href="/ekip/mehmet-demir" class="team-card">
+        <img src="/Fotograflar/resim.png" alt="Av. Mehmet Demir" />
+        <h3>Av. Mehmet Demir</h3>
+        <p>İş Hukuku Uzmanı</p>
+      </a>
+    </div>
+
+    <div id="hizmetler">
+      <div style="text-align: center; margin: 60px 0">
+        <h4>Hizmetlerimiz</h4>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="icon">⚖️</div>
+          <h3 class="card-title">Hukuki Danışmanlık</h3>
+          <p>Uzman ekibimizle hukuki danışmanlık hizmeti sunuyoruz.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📄</div>
+          <h3 class="card-title">Dava Takibi</h3>
+          <p>Tüm dava süreçlerini düzenli şekilde yönetiyoruz.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">🤝</div>
+          <h3 class="card-title">Arabuluculuk</h3>
+          <p>Uyuşmazlıkların hızlı çözümü için destek sağlıyoruz.</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="icon">🏛️</div>
+          <h3 class="card-title">Duruşma Temsili</h3>
+          <p>
+            Müvekkillerimizi tüm dava ve duruşma süreçlerinde temsil ediyoruz.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📚</div>
+          <h3 class="card-title">Sözleşme Hazırlığı</h3>
+          <p>Ticari ve bireysel sözleşmelerin hazırlanması ve incelenmesi.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">🛡️</div>
+          <h3 class="card-title">Hukuki Koruma</h3>
+          <p>Hak kayıplarını önlemek için önleyici hukuk desteği sunuyoruz.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="iletisim" class="contact-container">
+      <div class="contact-about-left">
+        <div style="text-align: left">
+          <h2>İletişim</h2>
+        </div>
+        <p><strong>Adres:</strong> İstanbul, Türkiye</p>
+        <p><strong>Telefon:</strong> 0212 123 45 67</p>
+        <p><strong>Email:</strong> bilgi@altinbasavukat.com</p>
+        <p><strong>Ahmet Altınbaş:</strong> 0212 123 45 67</p>
+        <p><strong>Elif Yılmaz:</strong> 0212 123 45 67</p>
+        <p><strong>Mehmet Demir:</strong> 0212 123 45 67</p>
+      </div>
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3126.5926427206646!2d27.108041775913094!3d38.404666871833356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzjCsDI0JzE2LjgiTiAyN8KwMDYnMzguMiJF!5e0!3m2!1sen!2str!4v1782391006251!5m2!1sen!2str"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
   </body>
 </html>
