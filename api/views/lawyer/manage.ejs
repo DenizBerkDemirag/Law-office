@@ -206,6 +206,55 @@
           </table>
         <% } %>
       </section>
+      <!-- ============ MÜSAİT OLMAYAN SAATLER ============ -->
+      <section class="dashboard-section">
+        <h2>Müsait Olmayan Saatler</h2>
+
+        <form action="/lawyer/blocked-slots" method="POST" class="dashboard-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="blockDate">Tarih</label>
+              <input type="date" id="blockDate" name="date" required />
+            </div>
+            <div class="form-group">
+              <label for="blockTime">Saat</label>
+              <select id="blockTime" name="time" required>
+                <% allTimeSlots.forEach(function(slot) { %>
+                  <option value="<%= slot %>"><%= slot %></option>
+                <% }); %>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Bu Saati Kapat</button>
+        </form>
+
+        <% if (blockedSlots.length === 0) { %>
+          <p class="empty-state">Kapatılmış bir saat bulunmuyor.</p>
+        <% } else { %>
+          <table class="cases-table" style="margin-top: 16px;">
+            <thead>
+              <tr>
+                <th>Tarih</th>
+                <th>Saat</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% blockedSlots.forEach(function(slot) { %>
+                <tr>
+                  <td><%= new Date(slot.Date).toLocaleDateString('tr-TR') %></td>
+                  <td><%= slot.Time %></td>
+                  <td>
+                    <form action="/lawyer/blocked-slots/<%= slot._id %>/delete" method="POST" class="inline-form">
+                      <button type="submit" class="btn btn-small">Aç</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
     </main>
       <script>
         function confirmMemberDelete(button, caseCount) {

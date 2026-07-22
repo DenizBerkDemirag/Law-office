@@ -8,6 +8,8 @@ const Case = require("../db/models/Case");
 const Document = require("../db/models/Document");
 const User = require("../db/models/User");
 const Appointment = require("../db/models/Appointment");
+const BlockedSlot = require("../db/models/BlockedSlot");
+const { getAllTimeSlots } = require("../utils/timeSlots");
 
 router.use(isAuthenticated, isLawyer);
 
@@ -17,6 +19,7 @@ async function getDashboardData() {
   const appointments = await Appointment.find()
     .populate("Member")
     .sort({ RequestedDate: 1 });
+  const blockedSlots = await BlockedSlot.find().sort({ Date: 1, Time: 1 });
 
   const caseCountByMember = {};
   cases.forEach((c) => {
@@ -26,7 +29,14 @@ async function getDashboardData() {
     }
   });
 
-  return { cases, members, appointments, caseCountByMember };
+  return {
+    cases,
+    members,
+    appointments,
+    blockedSlots,
+    caseCountByMember,
+    allTimeSlots: getAllTimeSlots(),
+  };
 }
 
 // ============ DASHBOARD (sade) ============
@@ -483,6 +493,52 @@ router.post("/appointments/:id/reject", async (req, res) => {
     res.status(500).render("lawyer/manage", {
       ...data,
       error: "Randevu reddedilirken bir hata oluştu.",
+    });
+  }
+});
+
+// ============ SAAT KAPATMA (dolu işaretleme) ============
+router.post("/blocked-slots", async (req, res) => {
+  try {
+    const { date, time } = req.body;
+
+    if (!date || !time) {
+      const data = await getDashboardData();
+      return res.status(400).render("lawyer/manage", {
+        ...data,
+        error: "Tarih ve saat seçilmesi zorunludur.",
+      });
+    }
+
+    await BlockedSlot.create({ Date: date, Time: time });
+    res.redirect("/lawyer/manage");
+  } catch (err) {
+    console.error(err);
+    const data = await getDashboardData();
+    if (err.code === 11000) {
+      return res.status(400).render("lawyer/manage", {
+        ...data,
+        error: "Bu tarih ve saat zaten kapatılmış.",
+      });
+    }
+    return res.status(500).render("lawyer/manage", {
+      ...data,
+      error: "Saat kapatılırken bir hata oluştu.",
+    });
+  }
+});
+
+// ============ SAAT AÇMA (kapatmayı kaldırma) ============
+router.post("/blocked-slots/:id/delete", async (req, res) => {
+  try {
+    await BlockedSlot.findByIdAndDelete(req.params.id);
+    res.redirect("/lawyer/manage");
+  } catch (err) {
+    console.error(err);
+    const data = await getDashboardData();
+    res.status(500).render("lawyer/manage", {
+      ...data,
+      error: "Saat açılırken bir hata oluştu.",
     });
   }
 });

@@ -4,6 +4,8 @@ const { isAuthenticated, isMember } = require("../middleware/auth");
 const Case = require("../db/models/Case");
 const Document = require("../db/models/Document");
 const Appointment = require("../db/models/Appointment");
+const BlockedSlot = require("../db/models/BlockedSlot");
+const { getAllTimeSlots } = require("../utils/timeSlots");
 
 router.use(isAuthenticated, isMember);
 
@@ -14,7 +16,24 @@ router.get("/dashboard", async (req, res) => {
   const appointments = await Appointment.find({
     Member: req.session.userId,
   }).sort({ CreatedAt: -1 });
-  res.render("member/dashboard", { cases, appointments });
+
+  // Önümüzdeki 14 gün için tarih listesi (bugün dahil)
+  const upcomingDates = [];
+  for (let i = 0; i < 14; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    const iso = d.toISOString().slice(0, 10); // "YYYY-MM-DD"
+    upcomingDates.push({
+      value: iso,
+      label: d.toLocaleDateString("tr-TR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      }),
+    });
+  }
+
+  res.render("member/dashboard", { cases, appointments, upcomingDates });
 });
 
 // Dava detay
@@ -55,94 +74,101 @@ router.get("/documents/:id/download", async (req, res) => {
 // ============ RANDEVU İSTEME ============
 router.post("/appointments", async (req, res) => {
   try {
-    const { requestedDate, note } = req.body;
+    const { date, time, note } = req.body;
 
-    if (!requestedDate) {
+    async function rerender(error) {
       const cases = await Case.find({ Member: req.session.userId }).sort({
         CreatedAt: -1,
       });
       const appointments = await Appointment.find({
         Member: req.session.userId,
       }).sort({ CreatedAt: -1 });
-      return res.status(400).render("member/dashboard", {
-        cases,
-        appointments,
-        error: "Randevu tarihi zorunludur.",
-      });
+      const upcomingDates = [];
+      for (let i = 0; i < 14; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        upcomingDates.push({
+          value: d.toISOString().slice(0, 10),
+          label: d.toLocaleDateString("tr-TR", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+          }),
+        });
+      }
+      return res
+        .status(400)
+        .render("member/dashboard", {
+          cases,
+          appointments,
+          upcomingDates,
+          error,
+        });
     }
 
-    const parsedDate = new Date(requestedDate);
-
-    if (isNaN(parsedDate.getTime())) {
-      const cases = await Case.find({ Member: req.session.userId }).sort({
-        CreatedAt: -1,
-      });
-      const appointments = await Appointment.find({
-        Member: req.session.userId,
-      }).sort({ CreatedAt: -1 });
-      return res.status(400).render("member/dashboard", {
-        cases,
-        appointments,
-        error: "Geçersiz tarih formatı.",
-      });
+    if (!date || !time) {
+      return await rerender("Tarih ve saat seçilmesi zorunludur.");
     }
 
-    // Geçmiş tarih kontrolü
-    if (parsedDate < new Date()) {
-      const cases = await Case.find({ Member: req.session.userId }).sort({
-        CreatedAt: -1,
-      });
-      const appointments = await Appointment.find({
-        Member: req.session.userId,
-      }).sort({ CreatedAt: -1 });
-      return res.status(400).render("member/dashboard", {
-        cases,
-        appointments,
-        error: "Geçmiş bir tarihe randevu alamazsınız.",
-      });
+    // Sunucu tarafında da müsaitlik kontrolü — asıl güvenlik burada
+    const blocked = await BlockedSlot.findOne({ Date: date, Time: time });
+    if (blocked) {
+      return await rerender(
+        "Seçtiğiniz saat dolu, lütfen başka bir saat seçin.",
+      );
     }
 
-    // 30 dakikalık dilim kontrolü — dakika 0 veya 30 değilse reddet
-    const minutes = parsedDate.getMinutes();
-    if (minutes !== 0 && minutes !== 30) {
-      const cases = await Case.find({ Member: req.session.userId }).sort({
-        CreatedAt: -1,
-      });
-      const appointments = await Appointment.find({
-        Member: req.session.userId,
-      }).sort({ CreatedAt: -1 });
-      return res.status(400).render("member/dashboard", {
-        cases,
-        appointments,
-        error:
-          "Randevular sadece saat başı veya buçuklarda alınabilir (örn. 14:00, 14:30).",
-      });
-    }
+    const [hour, minute] = time.split(":").map(Number);
+    const requestedDate = new Date(`${date}T00:00:00`);
+    requestedDate.setHours(hour, minute, 0, 0);
 
-    // Saniye/milisaniye varsa temizle (tam dakikaya yuvarla)
-    parsedDate.setSeconds(0, 0);
+    if (requestedDate < new Date()) {
+      return await rerender("Geçmiş bir tarihe randevu alamazsınız.");
+    }
 
     await Appointment.create({
       Member: req.session.userId,
-      RequestedDate: parsedDate,
+      RequestedDate: requestedDate,
       Note: note,
     });
 
     res.redirect("/member/dashboard");
   } catch (err) {
     console.error(err);
-    const cases = await Case.find({ Member: req.session.userId }).sort({
-      CreatedAt: -1,
-    });
-    const appointments = await Appointment.find({
-      Member: req.session.userId,
-    }).sort({ CreatedAt: -1 });
-    res.status(500).render("member/dashboard", {
-      cases,
-      appointments,
-      error: "Randevu talebi oluşturulurken bir hata oluştu.",
-    });
+    res.status(500).send("Randevu talebi oluşturulurken bir hata oluştu.");
   }
+});
+
+// ============ SEÇİLEN GÜN İÇİN MÜSAİT SAATLER (AJAX) ============
+router.get("/available-times", async (req, res) => {
+  const { date } = req.query;
+
+  if (!date) {
+    return res.status(400).json({ error: "Tarih belirtilmedi." });
+  }
+
+  const allSlots = getAllTimeSlots();
+
+  const blocked = await BlockedSlot.find({ Date: date });
+  const blockedTimes = new Set(blocked.map((b) => b.Time));
+
+  const now = new Date();
+  const isToday = date === now.toISOString().slice(0, 10);
+
+  const availableSlots = allSlots.filter((time) => {
+    if (blockedTimes.has(time)) return false;
+
+    if (isToday) {
+      const [hour, minute] = time.split(":").map(Number);
+      const slotTime = new Date();
+      slotTime.setHours(hour, minute, 0, 0);
+      if (slotTime <= now) return false; // bugünse, geçmiş saatleri filtrele
+    }
+
+    return true;
+  });
+
+  res.json({ times: availableSlots });
 });
 
 module.exports = router;

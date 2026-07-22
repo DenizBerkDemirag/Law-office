@@ -55,20 +55,33 @@
         <% } %>
       </section>
 
+      <!-- ============ RANDEVU TALEPLERİM ============ -->
       <section class="dashboard-section">
         <h2>Randevu İste</h2>
-        <form action="/member/appointments" method="POST" class="dashboard-form">
+
+        <% if (typeof error !== "undefined" && error) { %>
+          <div class="alert alert-error"><%= error %></div>
+        <% } %>
+
+        <form action="/member/appointments" method="POST" class="dashboard-form" id="appointmentForm">
           <div class="form-row">
             <div class="form-group">
-              <label for="requestedDate">Tercih Ettiğiniz Tarih ve Saat</label>
-              <input
-                type="datetime-local"
-                id="requestedDate"
-                name="requestedDate"
-                step="1800"
-                required
-              />
+              <label for="date">Gün Seçin</label>
+              <select id="date" name="date" required>
+                <option value="" disabled selected>Bir gün seçin</option>
+                <% upcomingDates.forEach(function(d) { %>
+                  <option value="<%= d.value %>"><%= d.label %></option>
+                <% }); %>
+              </select>
             </div>
+
+            <div class="form-group">
+              <label for="time">Saat Seçin</label>
+              <select id="time" name="time" required disabled>
+                <option value="" selected>Önce bir gün seçin</option>
+              </select>
+            </div>
+
             <div class="form-group" style="flex: 2;">
               <label for="note">Not (opsiyonel)</label>
               <input type="text" id="note" name="note" placeholder="Görüşmek istediğiniz konu hakkında kısa bir not" />
@@ -77,52 +90,37 @@
           <button type="submit" class="btn btn-primary">Randevu Talep Et</button>
         </form>
       </section>
-
-      <!-- ============ RANDEVU TALEPLERİM ============ -->
-      <section class="dashboard-section">
-        <h2>Randevu Taleplerim</h2>
-
-        <% if (appointments.length === 0) { %>
-          <p class="empty-state">Henüz bir randevu talebiniz bulunmuyor.</p>
-        <% } else { %>
-          <table class="cases-table">
-            <thead>
-              <tr>
-                <th>Talep Edilen Tarih</th>
-                <th>Not</th>
-                <th>Durum</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% appointments.forEach(function(appointment) { %>
-                <tr>
-                  <td><%= new Date(appointment.RequestedDate).toLocaleString('tr-TR') %></td>
-                  <td><%= appointment.Note || "—" %></td>
-                  <td>
-                    <span class="status-badge status-<%= appointment.Status %>">
-                      <%= appointment.Status === "pending" ? "Bekliyor" : appointment.Status === "approved" ? "Onaylandı" : "Reddedildi" %>
-                    </span>
-                  </td>
-                </tr>
-              <% }); %>
-            </tbody>
-          </table>
-        <% } %>
-      </section>
     </main>
       <script>
-        // Geçmiş tarihleri seçilemez yap + min değerini en yakın 30 dk'ya yuvarla
-        document.addEventListener("DOMContentLoaded", function () {
-          const input = document.getElementById("requestedDate");
-          const now = new Date();
+        document.getElementById("date").addEventListener("change", async function () {
+          const selectedDate = this.value;
+          const timeSelect = document.getElementById("time");
 
-          // Dakikayı en yakın (yukarı) 30'luk dilime yuvarla
-          const minutes = now.getMinutes();
-          const roundedMinutes = minutes < 30 ? 30 : 60;
-          now.setMinutes(roundedMinutes, 0, 0);
+          timeSelect.disabled = true;
+          timeSelect.innerHTML = '<option value="">Yükleniyor...</option>';
 
-          now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // yerel saate çevir
-          input.min = now.toISOString().slice(0, 16);
+          try {
+            const res = await fetch(`/member/available-times?date=${selectedDate}`);
+            const data = await res.json();
+
+            if (!data.times || data.times.length === 0) {
+              timeSelect.innerHTML = '<option value="">Bu gün için uygun saat yok</option>';
+              return;
+            }
+
+            timeSelect.innerHTML = '<option value="" disabled selected>Bir saat seçin</option>';
+            data.times.forEach(function (time) {
+              const option = document.createElement("option");
+              option.value = time;
+              option.textContent = time;
+              timeSelect.appendChild(option);
+            });
+
+            timeSelect.disabled = false;
+          } catch (err) {
+            console.error(err);
+            timeSelect.innerHTML = '<option value="">Saatler yüklenemedi</option>';
+          }
         });
       </script>
   </body>
