@@ -20,6 +20,10 @@
     </div>
 
     <main class="dashboard-container">
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
       <section class="dashboard-section">
         <h2>Davalarım</h2>
 
@@ -36,13 +40,68 @@
               </tr>
             </thead>
             <tbody>
-              <% cases.forEach(function(dava) { %>
-                <tr class="clickable-row" onclick="window.location='/member/cases/<%= dava._id %>'">
-                  <td><%= dava.dosyaNo %></td>
-                  <td><%= dava.Konu %></td>
-                  <td><%= new Date(dava.created_at).toLocaleDateString('tr-TR') %></td>
+              <% cases.forEach(function(caseItem) { %>
+                <tr class="clickable-row" onclick="window.location='/member/cases/<%= caseItem._id %>'">
+                  <td><%= caseItem.FileNumber %></td>
+                  <td><%= caseItem.Subject %></td>
+                  <td><%= new Date(caseItem.CreatedAt).toLocaleDateString('tr-TR') %></td>
                   <td>
-                    <a href="/member/cases/<%= dava._id %>" class="btn btn-small">Detay</a>
+                    <a href="/member/cases/<%= caseItem._id %>" class="btn btn-small">Detay</a>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+
+      <section class="dashboard-section">
+        <h2>Randevu İste</h2>
+        <form action="/member/appointments" method="POST" class="dashboard-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="requestedDate">Tercih Ettiğiniz Tarih ve Saat</label>
+              <input
+                type="datetime-local"
+                id="requestedDate"
+                name="requestedDate"
+                step="1800"
+                required
+              />
+            </div>
+            <div class="form-group" style="flex: 2;">
+              <label for="note">Not (opsiyonel)</label>
+              <input type="text" id="note" name="note" placeholder="Görüşmek istediğiniz konu hakkında kısa bir not" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Randevu Talep Et</button>
+        </form>
+      </section>
+
+      <!-- ============ RANDEVU TALEPLERİM ============ -->
+      <section class="dashboard-section">
+        <h2>Randevu Taleplerim</h2>
+
+        <% if (appointments.length === 0) { %>
+          <p class="empty-state">Henüz bir randevu talebiniz bulunmuyor.</p>
+        <% } else { %>
+          <table class="cases-table">
+            <thead>
+              <tr>
+                <th>Talep Edilen Tarih</th>
+                <th>Not</th>
+                <th>Durum</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% appointments.forEach(function(appointment) { %>
+                <tr>
+                  <td><%= new Date(appointment.RequestedDate).toLocaleString('tr-TR') %></td>
+                  <td><%= appointment.Note || "—" %></td>
+                  <td>
+                    <span class="status-badge status-<%= appointment.Status %>">
+                      <%= appointment.Status === "pending" ? "Bekliyor" : appointment.Status === "approved" ? "Onaylandı" : "Reddedildi" %>
+                    </span>
                   </td>
                 </tr>
               <% }); %>
@@ -51,5 +110,20 @@
         <% } %>
       </section>
     </main>
+      <script>
+        // Geçmiş tarihleri seçilemez yap + min değerini en yakın 30 dk'ya yuvarla
+        document.addEventListener("DOMContentLoaded", function () {
+          const input = document.getElementById("requestedDate");
+          const now = new Date();
+
+          // Dakikayı en yakın (yukarı) 30'luk dilime yuvarla
+          const minutes = now.getMinutes();
+          const roundedMinutes = minutes < 30 ? 30 : 60;
+          now.setMinutes(roundedMinutes, 0, 0);
+
+          now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // yerel saate çevir
+          input.min = now.toISOString().slice(0, 16);
+        });
+      </script>
   </body>
 </html>

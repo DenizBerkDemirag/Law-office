@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/CSS/style.css" />
+    <link rel="stylesheet" href="/CSS/style-dashboard.css" />
+    <title>Kayıt Yönetimi</title>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="nav-left">
+        <a href="/lawyer/dashboard">← Panele Dön</a>
+        <a href="/lawyer/archive" style="margin-left: 16px;">Arşiv</a>
+      </div>
+      <div class="nav-right">
+        <form action="/logout" method="POST" class="inline-form">
+          <button type="submit" class="link-button">Çıkış Yap</button>
+        </form>
+      </div>
+    </div>
+
+    <main class="dashboard-container">
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <!-- ============ ÜYE EKLEME ============ -->
+      <section class="dashboard-section">
+        <h2>Yeni Üye Ekle</h2>
+        <form action="/lawyer/members" method="POST" class="dashboard-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="username">Kullanıcı Adı</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="password">Şifre</label>
+              <input type="password" id="password" name="password" required minlength="6" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Üye Ekle</button>
+        </form>
+      </section>
+
+      <!-- ============ ÜYE LİSTESİ ============ -->
+      <section class="dashboard-section">
+        <h2>Üye Listesi</h2>
+
+        <% if (members.length === 0) { %>
+          <p class="empty-state">Henüz kayıtlı üye bulunmuyor.</p>
+        <% } else { %>
+          <table class="cases-table">
+            <thead>
+              <tr>
+                <th>Kullanıcı Adı</th>
+                <th>Email</th>
+                <th>Kullanıcı Adı Değiştir</th>
+                <th>Şifre Güncelle</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% members.forEach(function(member) { %>
+                <tr>
+                  <td><%= member.Username %></td>
+                  <td><%= member.Email %></td>
+                  <td>
+                    <form action="/lawyer/members/<%= member._id %>/username" method="POST" class="inline-edit-form">
+                      <input type="text" name="username" placeholder="Yeni kullanıcı adı" required />
+                      <button type="submit" class="btn btn-small">Güncelle</button>
+                    </form>
+                  </td>
+                  <td>
+                    <form action="/lawyer/members/<%= member._id %>/password" method="POST" class="inline-edit-form">
+                      <input type="password" name="password" placeholder="Yeni şifre" minlength="6" required />
+                      <button type="submit" class="btn btn-small">Güncelle</button>
+                    </form>
+                  </td>
+                  <td>
+                    <form action="/lawyer/members/<%= member._id %>/delete" method="POST" class="delete-member-form">
+                      <input type="hidden" name="force" value="false" />
+                      <button
+                        type="button"
+                        class="btn btn-small btn-danger"
+                        onclick="confirmMemberDelete(this, <%= caseCountByMember[member._id.toString()] || 0 %>)"
+                      >
+                        Sil
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+
+      <!-- ============ DAVA EKLEME ============ -->
+      <section class="dashboard-section">
+        <h2>Yeni Dava Ekle</h2>
+        <form action="/lawyer/cases" method="POST" class="dashboard-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="memberId">Müvekkil</label>
+              <select id="memberId" name="memberId" required>
+                <option value="" disabled selected>Müvekkil seçin</option>
+                <% members.forEach(function(member) { %>
+                  <option value="<%= member._id %>"><%= member.Username || member.Email %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fileNumber">Dosya No</label>
+              <input type="text" id="fileNumber" name="fileNumber" required />
+            </div>
+            <div class="form-group">
+              <label for="subject">Konu</label>
+              <input type="text" id="subject" name="subject" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Dava Ekle</button>
+        </form>
+      </section>
+
+      <!-- ============ DAVA LİSTESİ ============ -->
+      <section class="dashboard-section">
+        <h2>Dava Listesi</h2>
+
+        <% if (cases.length === 0) { %>
+          <p class="empty-state">Henüz kayıtlı dava bulunmuyor.</p>
+        <% } else { %>
+          <table class="cases-table">
+            <thead>
+              <tr>
+                <th>Dosya No</th>
+                <th>Konu</th>
+                <th>Müvekkil</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cases.forEach(function(caseItem) { %>
+                <tr>
+                  <td><%= caseItem.FileNumber %></td>
+                  <td><%= caseItem.Subject %></td>
+                  <td><%= caseItem.Member ? (caseItem.Member.Username || caseItem.Member.Email) : "—" %></td>
+                  <td>
+                    <a href="/lawyer/cases/<%= caseItem._id %>/edit" class="btn btn-small">Düzenle</a>
+                    <form action="/lawyer/cases/<%= caseItem._id %>/delete" method="POST" class="inline-form"
+                          onsubmit="return confirm('Bu davayı silmek istediğinize emin misiniz? Belgeleri de silinecektir.');">
+                      <button type="submit" class="btn btn-small btn-danger">Sil</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+      <!-- ============ RANDEVU TALEPLERİ ============ -->
+      <section class="dashboard-section">
+        <h2>Randevu Talepleri</h2>
+
+        <% if (appointments.length === 0) { %>
+          <p class="empty-state">Henüz bir randevu talebi bulunmuyor.</p>
+        <% } else { %>
+          <table class="cases-table">
+            <thead>
+              <tr>
+                <th>Müvekkil</th>
+                <th>Talep Edilen Tarih</th>
+                <th>Not</th>
+                <th>Durum</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% appointments.forEach(function(appointment) { %>
+                <tr>
+                  <td><%= appointment.Member ? (appointment.Member.Username || appointment.Member.Email) : "—" %></td>
+                  <td><%= new Date(appointment.RequestedDate).toLocaleString('tr-TR') %></td>
+                  <td><%= appointment.Note || "—" %></td>
+                  <td>
+                    <span class="status-badge status-<%= appointment.Status %>">
+                      <%= appointment.Status === "pending" ? "Bekliyor" : appointment.Status === "approved" ? "Onaylandı" : "Reddedildi" %>
+                    </span>
+                  </td>
+                  <td>
+                    <% if (appointment.Status === "pending") { %>
+                      <form action="/lawyer/appointments/<%= appointment._id %>/approve" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-small">Onayla</button>
+                      </form>
+                      <form action="/lawyer/appointments/<%= appointment._id %>/reject" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-small btn-danger">Reddet</button>
+                      </form>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+    </main>
+      <script>
+        function confirmMemberDelete(button, caseCount) {
+          const form = button.closest("form");
+          const forceInput = form.querySelector('input[name="force"]');
+
+          let confirmed;
+          if (caseCount > 0) {
+            confirmed = confirm(
+              `Bu üyenin ${caseCount} adet kayıtlı davası var. Üyeyi silerseniz davaları da silinecek; davalara ait belgeler ise kalıcı olarak silinmeyip arşive taşınacaktır. Emin misiniz?`
+            );
+            forceInput.value = confirmed ? "true" : "false";
+          } else {
+            confirmed = confirm("Bu üyeyi silmek istediğinize emin misiniz?");
+            forceInput.value = "false";
+          }
+
+          if (confirmed) {
+            form.submit();
+          }
+        }
+      </script>
+  </body>
+</html>

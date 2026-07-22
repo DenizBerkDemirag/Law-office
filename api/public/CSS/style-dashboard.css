@@ -143,6 +143,29 @@ body {
   background-color: #d5dae8;
 }
 
+.btn-danger {
+  background-color: #b3261e;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #8f1e18;
+}
+
+.inline-edit-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.inline-edit-form input {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  width: 130px;
+}
+
 /* ============ Tablolar ============ */
 .cases-table {
   width: 100%;
@@ -211,6 +234,30 @@ body {
   font-size: 0.8rem;
 }
 
+/* ============ Randevu Status ============ */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-pending {
+  background-color: #fff4e5;
+  color: #b36b00;
+}
+
+.status-approved {
+  background-color: #e6f4ea;
+  color: #1e7d34;
+}
+
+.status-rejected {
+  background-color: #fdecea;
+  color: #b3261e;
+}
+
 /* ============ Uyarılar ============ */
 .alert {
   padding: 12px 16px;
@@ -246,4 +293,17 @@ body {
 
 .clickable-row:hover {
   background-color: #f0f2f6;
+}
+
+.sortable-header {
+  color: #444;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sortable-header:hover {
+  color: #1a2a4a;
+  text-decoration: underline;
 }

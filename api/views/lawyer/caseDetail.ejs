@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/CSS/style.css" />
     <link rel="stylesheet" href="/CSS/style-dashboard.css" />
-    <title>Dava Detayı — <%= dava.dosyaNo %></title>
+    <title>Dava Detayı — <%= caseItem.FileNumber %></title>
   </head>
   <body>
     <div class="navbar">
@@ -23,36 +23,36 @@
         <h2>Dava Bilgileri</h2>
         <dl class="case-info">
           <dt>Dosya No</dt>
-          <dd><%= dava.dosyaNo %></dd>
+          <dd><%= caseItem.FileNumber %></dd>
 
           <dt>Konu</dt>
-          <dd><%= dava.Konu %></dd>
+          <dd><%= caseItem.Subject %></dd>
 
           <dt>Müvekkil</dt>
-          <dd><%= dava.Uye ? (dava.Uye.Username || dava.Uye.Email) : "—" %></dd>
+          <dd><%= caseItem.Member ? (caseItem.Member.Username || caseItem.Member.Email) : "—" %></dd>
 
           <dt>Kayıt Tarihi</dt>
-          <dd><%= new Date(dava.created_at).toLocaleDateString('tr-TR') %></dd>
+          <dd><%= new Date(caseItem.CreatedAt).toLocaleDateString('tr-TR') %></dd>
         </dl>
       </section>
 
       <section class="dashboard-section">
         <h2>Belgeler</h2>
 
-        <% if (belgeler.length === 0) { %>
+        <% if (documents.length === 0) { %>
           <p class="empty-state">Bu davaya ait belge bulunmuyor.</p>
         <% } else { %>
           <ul class="document-list">
-            <% belgeler.forEach(function(belge) { %>
+            <% documents.forEach(function(document) { %>
               <li>
-                <span><%= belge.FileName %></span>
-                <span class="document-date"><%= new Date(belge.UploadedAt).toLocaleDateString('tr-TR') %></span>
+                <a href="/lawyer/documents/<%= document._id %>/download" target="_blank"><%= document.FileName %></a>
+                <span class="document-date"><%= new Date(document.UploadedAt).toLocaleDateString('tr-TR') %></span>
               </li>
             <% }); %>
           </ul>
         <% } %>
 
-        <form action="/lawyer/cases/<%= dava._id %>/documents" method="POST" enctype="multipart/form-data" class="dashboard-form">
+        <form action="/lawyer/cases/<%= caseItem._id %>/documents" method="POST" enctype="multipart/form-data" class="dashboard-form">
           <div class="form-group">
             <label for="file">Belge Yükle (JPEG, PNG, WEBP, PDF)</label>
             <input type="file" id="file" name="file" accept=".jpg,.jpeg,.png,.webp,.pdf" required />
