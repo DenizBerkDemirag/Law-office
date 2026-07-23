@@ -1,53 +1,63 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="520" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" width="540" height="120">
   <defs>
-    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#5B8BB6" />
-      <stop offset="100%" stop-color="#3F678C" />
+    <!-- Brand Color Gradients -->
+    <linearGradient id="navyBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
     </linearGradient>
     <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#E2B866" />
-      <stop offset="100%" stop-color="#C5A059" />
+      <stop offset="50%" stop-color="#C5A059" />
+      <stop offset="100%" stop-color="#9A7B3E" />
     </linearGradient>
-    <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#5B8BB6" flood-opacity="0.25" />
+    <filter id="sealShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.25" />
     </filter>
   </defs>
-  
-  <!-- Emblem Icon: Scales of Justice inside Emblem Shield -->
-  <g transform="translate(10, 10)" filter="url(#glow)">
-    <!-- Base Shield / Hexagon Frame -->
-    <path d="M 50 5 L 88 24 L 88 66 C 88 88 50 98 50 98 C 50 98 12 88 12 66 L 12 24 Z" 
-          fill="url(#primaryGrad)" stroke="url(#goldGrad)" stroke-width="2.5" />
+
+  <!-- FORMAL LEGAL CREST / SEAL EMBLEM (No Scales of Justice) -->
+  <g transform="translate(10, 10)" filter="url(#sealShadow)">
+    <!-- Outer Dark Navy Disc with Gold Border -->
+    <circle cx="50" cy="50" r="45" fill="url(#navyBgGrad)" stroke="url(#goldGrad)" stroke-width="2.5" />
     
-    <!-- Inner Scale Pillar -->
-    <path d="M 50 22 L 50 78 M 38 78 L 62 78" 
-          stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" />
-    
-    <!-- Balance Beam -->
-    <path d="M 28 34 Q 50 31 72 34" 
-          stroke="url(#goldGrad)" stroke-width="3.5" fill="none" stroke-linecap="round" />
-    <circle cx="50" cy="32.5" r="4.5" fill="#FFFFFF" />
-    
-    <!-- Left Scale Pan -->
-    <path d="M 28 34 L 20 54 M 28 34 L 36 54" stroke="#FFFFFF" stroke-width="1.8" />
-    <path d="M 16 54 Q 28 62 40 54 Z" fill="url(#goldGrad)" />
-    
-    <!-- Right Scale Pan -->
-    <path d="M 72 34 L 64 54 M 72 34 L 80 54" stroke="#FFFFFF" stroke-width="1.8" />
-    <path d="M 60 54 Q 72 62 84 54 Z" fill="url(#goldGrad)" />
+    <!-- Inner Concentric Precision Ring -->
+    <circle cx="50" cy="50" r="40" fill="none" stroke="url(#goldGrad)" stroke-width="1" stroke-dasharray="8 3" opacity="0.85" />
+    <circle cx="50" cy="50" r="37" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0.3" />
+
+    <!-- Classical Law Column & 'A' Monogram Motif -->
+    <!-- Column Base / Pedestal -->
+    <rect x="32" y="73" width="36" height="4" rx="1" fill="url(#goldGrad)" />
+    <rect x="35" y="69" width="30" height="3" rx="0.5" fill="#FFFFFF" opacity="0.9" />
+
+    <!-- Architectural Columns (3 Formal Pillars representing Law, Ethics, Justice) -->
+    <rect x="37" y="38" width="5" height="30" fill="url(#goldGrad)" />
+    <rect x="47.5" y="34" width="5" height="34" fill="#FFFFFF" />
+    <rect x="58" y="38" width="5" height="30" fill="url(#goldGrad)" />
+
+    <!-- Capital / Arch Pedestal forming 'A' Monogram Top -->
+    <polygon points="50,18 30,36 70,36" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" />
+    <polygon points="50,23 35,36 65,36" fill="url(#navyBgGrad)" />
+
+    <!-- Crossbeam of Monogram A -->
+    <line x1="33" y1="48" x2="67" y2="48" stroke="url(#goldGrad)" stroke-width="2" />
+
+    <!-- Center Honor Star -->
+    <polygon points="50,25 51.8,29.5 56.5,29.5 52.7,32.3 54.1,36.8 50,34 45.9,36.8 47.3,32.3 43.5,29.5 48.2,29.5" fill="url(#goldGrad)" />
   </g>
-  
-  <!-- Brand Typography -->
-  <text x="125" y="58" font-family="'Cinzel', 'Playfair Display', 'Times New Roman', serif" 
-        font-size="36" font-weight="700" letter-spacing="4" fill="#0F172A">
+
+  <!-- FORMAL BRAND TYPOGRAPHY -->
+  <!-- Main Brand Name (Official Legal Blue #5B8BB6) -->
+  <text x="125" y="58" font-family="'Cinzel', 'Playfair Display', 'Georgia', serif" 
+        font-size="38" font-weight="700" letter-spacing="5" fill="#5B8BB6">
     ALTINBAŞ
   </text>
   
+  <!-- Subtitle / Practice Line (Classic Gold Accent #C5A059) -->
   <text x="127" y="84" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', sans-serif" 
-        font-size="12.5" font-weight="600" letter-spacing="6" fill="#5B8BB6">
+        font-size="12" font-weight="700" letter-spacing="6.5" fill="#C5A059">
     HUKUK &amp; DANIŞMANLIK BÜROSU
-  </text>
+  </text>  
   
-  <!-- Subtle Separator Line -->
-  <line x1="127" y1="92" x2="480" y2="92" stroke="#E2E8F0" stroke-width="1" />
+  <!-- Fine Gold Separator Line -->
+  <line x1="127" y1="93" x2="495" y2="93" stroke="url(#goldGrad)" stroke-width="1.2" opacity="0.75" />
 </svg>

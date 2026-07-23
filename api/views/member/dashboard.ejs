@@ -13,7 +13,7 @@
     <header class="navbar">
       <div class="nav-left">
         <a href="/member/dashboard" class="brand-title">
-          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" style="height: 36px; filter: brightness(0) invert(1);" />
+          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" style="height: 36px;" />
           <span data-i18n="footer_portal">— Müvekkil Portalı</span>
         </a>
       </div>
@@ -47,113 +47,131 @@
         <div class="alert alert-error"><%= error %></div>
       <% } %>
 
-      <section class="dashboard-section">
-        <h2 data-i18n="member_cases_title">Takipteki Dava Dosyalarım</h2>
-
-        <% if (cases.length === 0) { %>
-          <p class="empty-state" data-i18n="empty_member_cases">Şu an adınıza kayıtlı aktif bir dava dosyası bulunmuyor.</p>
-        <% } else { %>
-          <div class="table-responsive">
-          <table class="cases-table">
-            <thead>
-              <tr>
-                <th data-i18n="dash_case_no">Dosya No (Esas No)</th>
-                <th data-i18n="dash_case_subject">Dava Konusu</th>
-                <th data-i18n="member_date">Kayıt Tarihi</th>
-                <th style="text-align: right;" data-i18n="dash_actions">Detay</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% cases.forEach(function(caseItem) { %>
-                <tr class="clickable-row" onclick="window.location='/member/cases/<%= caseItem._id %>'">
-                  <td><strong><%= caseItem.FileNumber %></strong></td>
-                  <td><%= caseItem.Subject %></td>
-                  <td><span data-i18n-date="<%= caseItem.CreatedAt %>"><%= new Date(caseItem.CreatedAt).toLocaleDateString('tr-TR') %></span></td>
-                  <td style="text-align: right;">
-                    <a href="/member/cases/<%= caseItem._id %>" class="btn btn-small">
-                      <span data-i18n="dash_detail">Dosyayı İncele</span>
-                    </a>
-                  </td>
-                </tr>
-              <% }); %>
-            </tbody>
-          </table>
+      <!-- EXECUTIVE WELCOME BANNER -->
+      <div class="dash-welcome-banner">
+        <div class="dash-welcome-text">
+          <h2>Müvekkil Portalı &amp; Dava Takip Ekranı</h2>
+          <p>Adınıza Kayıtlı Aktif Dava Dosyalarını İnceleyebilir ve Randevu Taleplerinizi Yönetebilirsiniz</p>
         </div>
-        <% } %>
-      </section>
+      </div>
 
-      <!-- ============ RANDEVU TALEPLERİM VE DURUMLARI ============ -->
-      <section class="dashboard-section">
-        <h2 data-i18n="member_appt_history">Randevu Talepleriniz ve Durumları</h2>
+      <!-- SPLIT LAYOUT -->
+      <div class="dash-split-layout">
+        <!-- LEFT MAIN COLUMN: CASES & APPOINTMENTS HISTORY -->
+        <div class="dash-main-col">
+          <section class="dashboard-section">
+            <h2 data-i18n="member_cases_title">Takipdeki Dava Dosyalarım</h2>
 
-        <% if (!appointments || appointments.length === 0) { %>
-          <p class="empty-state" data-i18n="empty_appts">Henüz bir randevu talebiniz bulunmuyor.</p>
-        <% } else { %>
-          <div class="table-responsive">
-          <table class="cases-table">
-            <thead>
-              <tr>
-                <th data-i18n="manage_appt_datetime">Talep Edilen Tarih &amp; Saat</th>
-                <th data-i18n="member_note">Talep Notu</th>
-                <th data-i18n="member_status">Durum / Sonuç</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% appointments.forEach(function(appointment) { %>
-                <tr>
-                  <td>
-                    <strong>
-                      <span data-i18n-datetime="<%= appointment.RequestedDate %>">
-                        <%= new Date(appointment.RequestedDate).toLocaleString('tr-TR') %>
-                      </span>
-                    </strong>
-                  </td>
-                  <td><%= appointment.Note || "—" %></td>
-                  <td>
-                    <span class="status-badge status-<%= appointment.Status %>" data-i18n="status_<%= appointment.Status %>">
-                      <%= appointment.Status === "pending" ? "Bekliyor" : appointment.Status === "approved" ? "Onaylandı" : "Reddedildi" %>
-                    </span>
-                  </td>
-                </tr>
-              <% }); %>
-            </tbody>
-          </table>
+            <% if (cases.length === 0) { %>
+              <p class="empty-state" data-i18n="empty_member_cases">Şu an adınıza kayıtlı aktif bir dava dosyası bulunmuyor.</p>
+            <% } else { %>
+              <div class="table-responsive">
+                <table class="cases-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="dash_case_no">Dosya No (Esas No)</th>
+                      <th data-i18n="dash_case_subject">Dava Konusu</th>
+                      <th data-i18n="member_date">Kayıt Tarihi</th>
+                      <th style="text-align: right;" data-i18n="dash_actions">Detay</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% cases.forEach(function(caseItem) { %>
+                      <tr class="clickable-row" onclick="window.location='/member/cases/<%= caseItem._id %>'">
+                        <td><strong><%= caseItem.FileNumber %></strong></td>
+                        <td><%= caseItem.Subject %></td>
+                        <td><span data-i18n-date="<%= caseItem.CreatedAt %>"><%= new Date(caseItem.CreatedAt).toLocaleDateString('tr-TR') %></span></td>
+                        <td style="text-align: right;">
+                          <a href="/member/cases/<%= caseItem._id %>" class="btn btn-small">
+                            <span data-i18n="dash_detail">Dosyayı İncele</span>
+                          </a>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
+          </section>
+
+          <section class="dashboard-section">
+            <h2 data-i18n="member_appt_history">Randevu Talepleriniz ve Durumları</h2>
+
+            <% if (!appointments || appointments.length === 0) { %>
+              <p class="empty-state" data-i18n="empty_appts">Henüz bir randevu talebiniz bulunmuyor.</p>
+            <% } else { %>
+              <div class="table-responsive">
+                <table class="cases-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="manage_appt_datetime">Talep Edilen Tarih &amp; Saat</th>
+                      <th data-i18n="member_note">Talep Notu</th>
+                      <th data-i18n="member_status">Durum / Sonuç</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% appointments.forEach(function(appointment) { %>
+                      <tr>
+                        <td>
+                          <strong>
+                            <span data-i18n-datetime="<%= appointment.RequestedDate %>">
+                              <%= new Date(appointment.RequestedDate).toLocaleString('tr-TR') %>
+                            </span>
+                          </strong>
+                        </td>
+                        <td><%= appointment.Note || "—" %></td>
+                        <td>
+                          <span class="status-badge status-<%= appointment.Status %>" data-i18n="status_<%= appointment.Status %>">
+                            <%= appointment.Status === "pending" ? "Bekliyor" : appointment.Status === "approved" ? "Onaylandı" : "Reddedildi" %>
+                          </span>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
+          </section>
         </div>
-        <% } %>
-      </section>
 
-      <!-- ============ RANDEVU TALEPLERİM ============ -->
-      <section class="dashboard-section">
-        <h2 data-i18n="member_appt_title">Avukatlarımızdan Randevu Talep Et</h2>
+        <!-- RIGHT SIDEBAR COLUMN: APPOINTMENT REQUEST WIDGET -->
+        <div class="dash-side-col">
+          <section class="dashboard-section" style="margin-bottom: 0;">
+            <h2 style="font-size: 1.1rem;" data-i18n="member_appt_title">Randevu Talep Et</h2>
 
-        <form action="/member/appointments" method="POST" class="dashboard-form" id="appointmentForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="date" data-i18n="member_date">Gün Seçin</label>
-              <select id="date" name="date" required>
-                <option value="" disabled selected data-i18n="select_a_day">Bir gün seçin</option>
-                <% upcomingDates.forEach(function(d) { %>
-                  <option value="<%= d.value %>"><%= d.label %></option>
-                <% }); %>
-              </select>
-            </div>
+            <form action="/member/appointments" method="POST" class="dashboard-form" id="appointmentForm">
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label for="date" data-i18n="member_date">Gün Seçin</label>
+                <select id="date" name="date" required style="width: 100%;">
+                  <option value="" disabled selected data-i18n="select_a_day">Bir gün seçin</option>
+                  <% upcomingDates.forEach(function(d) { %>
+                    <option value="<%= d.value %>"><%= d.label %></option>
+                  <% }); %>
+                </select>
+              </div>
 
-            <div class="form-group">
-              <label for="time" data-i18n="member_time">Saat Seçin</label>
-              <select id="time" name="time" required disabled>
-                <option value="" selected data-i18n="select_a_day_first">Önce bir gün seçin</option>
-              </select>
-            </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label for="time" data-i18n="member_time">Saat Seçin</label>
+                <select id="time" name="time" required disabled style="width: 100%;">
+                  <option value="" selected data-i18n="select_a_day_first">Önce bir gün seçin</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 18px;">
+                <label for="note" data-i18n="member_note">Talep Notu</label>
+                <input type="text" id="note" name="note" placeholder="Kısa bilgi..." data-i18n-placeholder="ph_note_hint" style="width: 100%;" />
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;" data-i18n="member_appt_send">Randevu Talebi Gönder</button>
+            </form>
+          </section>
+
+          <div class="side-widget-card">
+            <h4>⚖️ Müvekkil Bilgi Notu</h4>
+            <p>Dava dosyanızla ilgili belgelere detay ekranından ulaşabilir, sorularınız için sağ alttaki mesajlaşma çubuğunu kullanabilirsiniz.</p>
           </div>
-
-          <div class="form-group" style="margin-bottom: 20px;">
-            <label for="note" data-i18n="member_note">Talep Notu (İsteğe Bağlı)</label>
-            <input type="text" id="note" name="note" placeholder="Konu hakkında kısa bilgi verebilirsiniz..." data-i18n-placeholder="ph_note_hint" />
-          </div>
-
-          <button type="submit" class="btn btn-primary" data-i18n="member_appt_send">Randevu Talebi Gönder</button>
-        </form>
-      </section>
+        </div>
+      </div>
     </main>
 
     <script>
@@ -188,6 +206,7 @@
         }
       });
     </script>
+    <%- include('../partials/chat-bar') %>
     <script src="/JS/i18n.js"></script>
   </body>
 </html>

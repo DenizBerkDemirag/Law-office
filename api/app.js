@@ -44,6 +44,7 @@ app.use("/", require("./routes/auth"));
 app.use("/ekip", require("./routes/ekip"));
 app.use("/lawyer", require("./routes/lawyer"));
 app.use("/member", require("./routes/member"));
+app.use("/messages", require("./routes/messages"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

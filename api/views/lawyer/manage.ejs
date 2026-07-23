@@ -13,7 +13,7 @@
     <header class="navbar">
       <div class="nav-left">
         <a href="/lawyer/dashboard" class="brand-title">
-          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" style="height: 36px; filter: brightness(0) invert(1);" />
+          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" style="height: 36px;" />
           <span data-i18n="dash_back_panel">← Panele Dön</span>
         </a>
         <a href="/lawyer/archive" class="nav-link" style="margin-left: 20px;" data-i18n="dash_archive">Belge Arşivi</a>
@@ -48,266 +48,328 @@
         <div class="alert alert-error"><%= error %></div>
       <% } %>
 
-      <!-- ============ KULLANICI EKLEME ============ -->
-      <section class="dashboard-section">
-        <h2 data-i18n="manage_user_add">Yeni Kullanıcı (Müvekkil / Avukat) Ekle</h2>
-        <form action="/lawyer/members" method="POST" class="dashboard-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="username" data-i18n="manage_username_lbl">Kullanıcı Adı / Ad Soyad</label>
-              <input type="text" id="username" name="username" placeholder="ör. Ahmet Yılmaz" data-i18n-placeholder="ph_name_example" required />
-            </div>
-            <div class="form-group">
-              <label for="email" data-i18n="contact_email_lbl">E-posta Adresi</label>
-              <input type="email" id="email" name="email" placeholder="ornek@kullanici.com" required />
-            </div>
-            <div class="form-group">
-              <label for="password" data-i18n="manage_password_lbl">Giriş Şifresi</label>
-              <input type="password" id="password" name="password" placeholder="En az 6 karakter" data-i18n-placeholder="ph_min_chars" required minlength="6" />
-            </div>
-            <div class="form-group">
-              <label for="role" data-i18n="manage_role_lbl">Hesap Rolü</label>
-              <select id="role" name="role" required>
-                <option value="member" data-i18n="manage_role_member">Müvekkil (Üye)</option>
-                <option value="lawyer" data-i18n="manage_role_lawyer">Avukat (Admin)</option>
-              </select>
+      <!-- EXECUTIVE WELCOME BANNER -->
+      <div class="dash-welcome-banner">
+        <div class="dash-welcome-text">
+          <h2>Kayıt &amp; Sistem Yönetim Merkezi</h2>
+          <p>Dava Dosyası Oluşturma, Kullanıcı Kayıtları, Randevu Onayları ve Takvim Kısıtlamaları</p>
+        </div>
+        <div class="dash-welcome-actions">
+          <a href="/lawyer/dashboard" class="btn btn-small">← Panele Dön</a>
+          <a href="/lawyer/archive" class="btn btn-small">📁 Belge Arşivi</a>
+        </div>
+      </div>
+
+      <!-- MANAGEMENT TABS HEADER -->
+      <div class="manage-tabs">
+        <button type="button" class="tab-btn active" onclick="switchManageTab('tab-cases', this)">
+          📁 Dava Dosyası Yönetimi
+        </button>
+        <button type="button" class="tab-btn" onclick="switchManageTab('tab-appts', this)">
+          📅 Randevular &amp; Takvim
+        </button>
+        <button type="button" class="tab-btn" onclick="switchManageTab('tab-users', this)">
+          👥 Kullanıcı Hesabı Yönetimi
+        </button>
+      </div>
+
+      <!-- TAB 1: DAVA YÖNETİMİ -->
+      <div id="tab-cases" class="tab-content active">
+        <div class="dash-split-layout">
+          <div class="dash-main-col">
+            <section class="dashboard-section">
+              <h2 data-i18n="manage_case_add">Yeni Dava Dosyası Ekle</h2>
+              <form action="/lawyer/cases" method="POST" class="dashboard-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="memberId" data-i18n="dash_case_member">Müvekkil Seçin</label>
+                    <select id="memberId" name="memberId" required>
+                      <option value="" disabled selected data-i18n="select_a_client">Bir müvekkil seçin</option>
+                      <% members.forEach(function(member) { %>
+                        <option value="<%= member._id %>"><%= member.Username || member.Email %></option>
+                      <% }); %>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="fileNumber" data-i18n="dash_case_no">Dosya No (Esas No)</label>
+                    <input type="text" id="fileNumber" name="fileNumber" placeholder="ör. 2024/104" data-i18n-placeholder="ph_fileno_example" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="subject" data-i18n="dash_case_subject">Dava Konusu / Başlık</label>
+                    <input type="text" id="subject" name="subject" placeholder="ör. İş Sözleşmesinin Feshi İptali" data-i18n-placeholder="ph_subject_example" required />
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary" data-i18n="manage_create_case">Dava Dosyası Oluştur</button>
+              </form>
+            </section>
+
+            <section class="dashboard-section">
+              <h2 data-i18n="dash_cases_title">Aktif Dava Dosyaları</h2>
+              <% if (cases.length === 0) { %>
+                <p class="empty-state" data-i18n="empty_cases">Henüz kayıtlı dava bulunmuyor.</p>
+              <% } else { %>
+                <div class="table-responsive">
+                  <table class="cases-table">
+                    <thead>
+                      <tr>
+                        <th data-i18n="dash_case_no">Dosya No</th>
+                        <th data-i18n="dash_case_subject">Dava Konusu</th>
+                        <th data-i18n="dash_case_member">Müvekkil</th>
+                        <th style="text-align: right;" data-i18n="dash_actions">İşlemler</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% cases.forEach(function(caseItem) { %>
+                        <tr>
+                          <td><strong><%= caseItem.FileNumber %></strong></td>
+                          <td><%= caseItem.Subject %></td>
+                          <td><%= caseItem.Member ? (caseItem.Member.Username || caseItem.Member.Email) : "—" %></td>
+                          <td style="text-align: right;">
+                            <a href="/lawyer/cases/<%= caseItem._id %>/edit" class="btn btn-small" data-i18n="dash_edit">Düzenle</a>
+                            <form action="/lawyer/cases/<%= caseItem._id %>/delete" method="POST" class="inline-form" onsubmit="return confirm(t('confirm_delete_case'));">
+                              <button type="submit" class="btn btn-small btn-danger" data-i18n="dash_delete">Sil</button>
+                            </form>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } %>
+            </section>
+          </div>
+
+          <div class="dash-side-col">
+            <div class="side-widget-card">
+              <h4>⚖️ Dava Yönetim Rehberi</h4>
+              <p>Dosya numarası ve konusu girilerek oluşturulan dava dosyaları doğrudan müvekkil portalına aktarılır.</p>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary" data-i18n="manage_save_user">Kullanıcıyı Kaydet</button>
-        </form>
-      </section>
-
-      <!-- ============ KULLANICI LİSTESİ ============ -->
-      <section class="dashboard-section">
-        <h2 data-i18n="manage_user_list">Kayıtlı Kullanıcı Listesi</h2>
-        <% if (allUsers.length === 0) { %>
-          <p class="empty-state" data-i18n="empty_users">Henüz kayıtlı kullanıcı bulunmuyor.</p>
-        <% } else { %>
-          <div class="table-responsive">
-          <table class="cases-table">
-            <thead>
-              <tr>
-                <th data-i18n="dash_case_member">Kullanıcı Adı</th>
-                <th data-i18n="contact_email_lbl">E-posta</th>
-                <th data-i18n="manage_col_role">Rol</th>
-                <th data-i18n="manage_col_change_email">E-posta Güncelle</th>
-                <th data-i18n="manage_col_change_username">Kullanıcı Adı Değiştir</th>
-                <th data-i18n="manage_col_change_password">Şifre Güncelle</th>
-                <th style="text-align: right;" data-i18n="dash_actions">İşlem</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% allUsers.forEach(function(member) { %>
-                <tr>
-                  <td><strong><%= member.Username || "—" %></strong></td>
-                  <td><%= member.Email %></td>
-                  <td>
-                    <% if (member.Role === 'lawyer') { %>
-                      <span class="status-badge" style="background: #3F678C; color: #FFFFFF;" data-i18n="role_lawyer_badge">Avukat (Admin)</span>
-                    <% } else { %>
-                      <span class="status-badge" style="background: #E2E8F0; color: #334155;" data-i18n="role_member_badge">Müvekkil</span>
-                    <% } %>
-                  </td>
-                  <td>
-                    <form action="/lawyer/members/<%= member._id %>/email" method="POST" class="inline-edit-form">
-                      <input type="email" name="email" value="<%= member.Email %>" placeholder="Yeni e-posta" data-i18n-placeholder="manage_new_email" required />
-                      <button type="submit" class="btn btn-small" data-i18n="dash_update">Güncelle</button>
-                    </form>
-                  </td>
-                  <td>
-                    <form action="/lawyer/members/<%= member._id %>/username" method="POST" class="inline-edit-form">
-                      <input type="text" name="username" value="<%= member.Username || '' %>" placeholder="Yeni ad" data-i18n-placeholder="manage_new_username" required />
-                      <button type="submit" class="btn btn-small" data-i18n="dash_update">Güncelle</button>
-                    </form>
-                  </td>
-                  <td>
-                    <form action="/lawyer/members/<%= member._id %>/password" method="POST" class="inline-edit-form">
-                      <input type="password" name="password" placeholder="Yeni şifre" data-i18n-placeholder="manage_new_password" minlength="6" required />
-                      <button type="submit" class="btn btn-small" data-i18n="dash_update">Güncelle</button>
-                    </form>
-                  </td>
-                  <td style="text-align: right;">
-                    <form action="/lawyer/members/<%= member._id %>/delete" method="POST" class="delete-member-form inline-form">
-                      <input type="hidden" name="force" value="false" />
-                      <button
-                        type="button"
-                        class="btn btn-small btn-danger"
-                        data-i18n="dash_delete"
-                        onclick="confirmMemberDelete(this, <%= caseCountByMember[member._id.toString()] || 0 %>)"
-                      >
-                        Sil
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-              <% }); %>
-            </tbody>
-          </table>
         </div>
-        <% } %>
-      </section>
+      </div>
 
-      <!-- ============ DAVA EKLEME ============ -->
-      <section class="dashboard-section">
-        <h2 data-i18n="manage_case_add">Yeni Dava Dosyası Ekle</h2>
-        <form action="/lawyer/cases" method="POST" class="dashboard-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="memberId" data-i18n="dash_case_member">Müvekkil Seçin</label>
-              <select id="memberId" name="memberId" required>
-                <option value="" disabled selected data-i18n="select_a_client">Bir müvekkil seçin</option>
-                <% members.forEach(function(member) { %>
-                  <option value="<%= member._id %>"><%= member.Username || member.Email %></option>
-                <% }); %>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="fileNumber" data-i18n="dash_case_no">Dosya No (Esas No)</label>
-              <input type="text" id="fileNumber" name="fileNumber" placeholder="ör. 2024/104" data-i18n-placeholder="ph_fileno_example" required />
-            </div>
-            <div class="form-group">
-              <label for="subject" data-i18n="dash_case_subject">Dava Konusu / Başlık</label>
-              <input type="text" id="subject" name="subject" placeholder="ör. İş Sözleşmesinin Feshi İptali" data-i18n-placeholder="ph_subject_example" required />
+      <!-- TAB 2: RANDEVULAR VE TAKVİM -->
+      <div id="tab-appts" class="tab-content">
+        <div class="dash-split-layout">
+          <div class="dash-main-col">
+            <section class="dashboard-section">
+              <h2 data-i18n="manage_appts">Müvekkil Randevu Talepleri</h2>
+              <% if (appointments.length === 0) { %>
+                <p class="empty-state">Henüz bir randevu talebi bulunmuyor.</p>
+              <% } else { %>
+                <div class="table-responsive">
+                  <table class="cases-table">
+                    <thead>
+                      <tr>
+                        <th data-i18n="dash_case_member">Müvekkil</th>
+                        <th data-i18n="manage_appt_datetime">Talep Edilen Tarih &amp; Saat</th>
+                        <th data-i18n="manage_appt_note">Talep Notu</th>
+                        <th data-i18n="member_status">Durum</th>
+                        <th style="text-align: right;" data-i18n="dash_actions">İşlemler</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% appointments.forEach(function(appointment) { %>
+                        <tr>
+                          <td><strong><%= appointment.Member ? (appointment.Member.Username || appointment.Member.Email) : "—" %></strong></td>
+                          <td><span data-i18n-datetime="<%= appointment.RequestedDate %>"><%= new Date(appointment.RequestedDate).toLocaleString('tr-TR') %></span></td>
+                          <td><%= appointment.Note || "—" %></td>
+                          <td>
+                            <span class="status-badge status-<%= appointment.Status %>" data-i18n="status_<%= appointment.Status %>">
+                              <%= appointment.Status === "pending" ? "Bekliyor" : appointment.Status === "approved" ? "Onaylandı" : "Reddedildi" %>
+                            </span>
+                          </td>
+                          <td style="text-align: right;">
+                            <% if (appointment.Status === "pending") { %>
+                              <form action="/lawyer/appointments/<%= appointment._id %>/approve" method="POST" class="inline-form">
+                                <button type="submit" class="btn btn-small" style="background: #10B981; color: white;" data-i18n="manage_approve">Onayla</button>
+                              </form>
+                              <form action="/lawyer/appointments/<%= appointment._id %>/reject" method="POST" class="inline-form">
+                                <button type="submit" class="btn btn-small btn-danger" data-i18n="manage_reject">Reddet</button>
+                              </form>
+                            <% } %>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } %>
+            </section>
+
+            <section class="dashboard-section">
+              <h2 data-i18n="manage_blocked_slots">Müsait Olmayan Takvim Saatlerini Kapat</h2>
+              <form action="/lawyer/blocked-slots" method="POST" class="dashboard-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="blockDate" data-i18n="manage_slot_date">Tarih</label>
+                    <input type="date" id="blockDate" name="date" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="blockTime" data-i18n="manage_slot_time">Saat Dilimi</label>
+                    <select id="blockTime" name="time" required>
+                      <% allTimeSlots.forEach(function(slot) { %>
+                        <option value="<%= slot %>"><%= slot %></option>
+                      <% }); %>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary" data-i18n="manage_slot_close">Bu Saati Kapat</button>
+              </form>
+
+              <% if (blockedSlots.length === 0) { %>
+                <p class="empty-state" data-i18n="empty_blocked">Kapatılmış bir takvim saati bulunmuyor.</p>
+              <% } else { %>
+                <div class="table-responsive" style="margin-top: 14px;">
+                  <table class="cases-table">
+                    <thead>
+                      <tr>
+                        <th data-i18n="manage_col_date">Tarih</th>
+                        <th data-i18n="manage_col_closed_time">Kapatılan Saat</th>
+                        <th style="text-align: right;" data-i18n="manage_col_action">İşlem</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% blockedSlots.forEach(function(slot) { %>
+                        <tr>
+                          <td><span data-i18n-date="<%= slot.Date %>"><%= new Date(slot.Date).toLocaleDateString('tr-TR') %></span></td>
+                          <td><strong><%= slot.Time %></strong></td>
+                          <td style="text-align: right;">
+                            <form action="/lawyer/blocked-slots/<%= slot._id %>/delete" method="POST" class="inline-form">
+                              <button type="submit" class="btn btn-small" data-i18n="manage_slot_open">Tekrar Aç</button>
+                            </form>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } %>
+            </section>
+          </div>
+
+          <div class="dash-side-col">
+            <div class="side-widget-card">
+              <h4>📅 Takvim İpucu</h4>
+              <p>Duruşma veya yoğunluk günlerinde belirli saat dilimlerini kapatarak müvekkil randevu alımını engelleyebilirsiniz.</p>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary" data-i18n="manage_create_case">Dava Dosyası Oluştur</button>
-        </form>
-      </section>
-
-      <!-- ============ DAVA LİSTESİ ============ -->
-      <section class="dashboard-section">
-        <h2 data-i18n="dash_cases_title">Aktif Dava Dosyaları</h2>
-        <% if (cases.length === 0) { %>
-          <p class="empty-state" data-i18n="empty_cases">Henüz kayıtlı dava bulunmuyor.</p>
-        <% } else { %>
-          <div class="table-responsive">
-          <table class="cases-table">
-            <thead>
-              <tr>
-                <th data-i18n="dash_case_no">Dosya No</th>
-                <th data-i18n="dash_case_subject">Dava Konusu</th>
-                <th data-i18n="dash_case_member">Müvekkil</th>
-                <th style="text-align: right;" data-i18n="dash_actions">İşlemler</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% cases.forEach(function(caseItem) { %>
-                <tr>
-                  <td><strong><%= caseItem.FileNumber %></strong></td>
-                  <td><%= caseItem.Subject %></td>
-                  <td><%= caseItem.Member ? (caseItem.Member.Username || caseItem.Member.Email) : "—" %></td>
-                  <td style="text-align: right;">
-                    <a href="/lawyer/cases/<%= caseItem._id %>/edit" class="btn btn-small" data-i18n="dash_edit">Düzenle</a>
-                    <form action="/lawyer/cases/<%= caseItem._id %>/delete" method="POST" class="inline-form" onsubmit="return confirm(t('confirm_delete_case'));">
-                      <button type="submit" class="btn btn-small btn-danger" data-i18n="dash_delete">Sil</button>
-                    </form>
-                  </td>
-                </tr>
-              <% }); %>
-            </tbody>
-          </table>
         </div>
-        <% } %>
-      </section>
+      </div>
 
-      <!-- ============ RANDEVU TALEPLERİ ============ -->
-      <section class="dashboard-section">
-        <h2 data-i18n="manage_appts">Müvekkil Randevu Talepleri</h2>
-        <% if (appointments.length === 0) { %>
-          <p class="empty-state">Henüz bir randevu talebi bulunmuyor.</p>
-        <% } else { %>
-          <div class="table-responsive">
-          <table class="cases-table">
-            <thead>
-              <tr>
-                <th data-i18n="dash_case_member">Müvekkil</th>
-                <th data-i18n="manage_appt_datetime">Talep Edilen Tarih &amp; Saat</th>
-                <th data-i18n="manage_appt_note">Talep Notu</th>
-                <th data-i18n="member_status">Durum</th>
-                <th style="text-align: right;" data-i18n="dash_actions">İşlemler</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% appointments.forEach(function(appointment) { %>
-                <tr>
-                  <td><strong><%= appointment.Member ? (appointment.Member.Username || appointment.Member.Email) : "—" %></strong></td>
-                  <td><span data-i18n-datetime="<%= appointment.RequestedDate %>"><%= new Date(appointment.RequestedDate).toLocaleString('tr-TR') %></span></td>
-                  <td><%= appointment.Note || "—" %></td>
-                  <td>
-                    <span class="status-badge status-<%= appointment.Status %>" data-i18n="status_<%= appointment.Status %>">
-                      <%= appointment.Status === "pending" ? "Bekliyor" : appointment.Status === "approved" ? "Onaylandı" : "Reddedildi" %>
-                    </span>
-                  </td>
-                  <td style="text-align: right;">
-                    <% if (appointment.Status === "pending") { %>
-                      <form action="/lawyer/appointments/<%= appointment._id %>/approve" method="POST" class="inline-form">
-                        <button type="submit" class="btn btn-small" style="background: #10B981; color: white;" data-i18n="manage_approve">Onayla</button>
-                      </form>
-                      <form action="/lawyer/appointments/<%= appointment._id %>/reject" method="POST" class="inline-form">
-                        <button type="submit" class="btn btn-small btn-danger" data-i18n="manage_reject">Reddet</button>
-                      </form>
-                    <% } %>
-                  </td>
-                </tr>
-              <% }); %>
-            </tbody>
-          </table>
-        </div>
-        <% } %>
-      </section>
-
-      <!-- ============ MÜSAİT OLMAYAN SAATLER ============ -->
-      <section class="dashboard-section">
-        <h2 data-i18n="manage_blocked_slots">Müsait Olmayan Takvim Saatlerini Kapat</h2>
-        <form action="/lawyer/blocked-slots" method="POST" class="dashboard-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="blockDate" data-i18n="manage_slot_date">Tarih</label>
-              <input type="date" id="blockDate" name="date" required />
+      <!-- TAB 3: KULLANICI YÖNETİMİ (FULL WIDTH LAYOUT) -->
+      <div id="tab-users" class="tab-content">
+        <!-- YENİ KULLANICI EKLE FORMU (ÜST KISIM) -->
+        <section class="dashboard-section">
+          <h2 data-i18n="manage_user_add">Yeni Kullanıcı (Müvekkil / Avukat) Ekle</h2>
+          <form action="/lawyer/members" method="POST" class="dashboard-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="username" data-i18n="manage_username_lbl">Kullanıcı Adı / Ad Soyad</label>
+                <input type="text" id="username" name="username" placeholder="ör. Ahmet Yılmaz" data-i18n-placeholder="ph_name_example" required />
+              </div>
+              <div class="form-group">
+                <label for="email" data-i18n="contact_email_lbl">E-posta Adresi</label>
+                <input type="email" id="email" name="email" placeholder="ornek@kullanici.com" required />
+              </div>
+              <div class="form-group">
+                <label for="password" data-i18n="manage_password_lbl">Giriş Şifresi</label>
+                <input type="password" id="password" name="password" placeholder="En az 6 karakter" data-i18n-placeholder="ph_min_chars" required minlength="6" />
+              </div>
+              <div class="form-group">
+                <label for="role" data-i18n="manage_role_lbl">Hesap Rolü</label>
+                <select id="role" name="role" required>
+                  <option value="member" data-i18n="manage_role_member">Müvekkil (Üye)</option>
+                  <option value="lawyer" data-i18n="manage_role_lawyer">Avukat (Admin)</option>
+                </select>
+              </div>
+              <div class="form-group" style="justify-content: flex-end; align-self: flex-end;">
+                <button type="submit" class="btn btn-primary" data-i18n="manage_save_user">Kullanıcıyı Kaydet</button>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="blockTime" data-i18n="manage_slot_time">Saat Dilimi</label>
-              <select id="blockTime" name="time" required>
-                <% allTimeSlots.forEach(function(slot) { %>
-                  <option value="<%= slot %>"><%= slot %></option>
-                <% }); %>
-              </select>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary" data-i18n="manage_slot_close">Bu Saati Kapat</button>
-        </form>
+          </form>
+        </section>
 
-        <% if (blockedSlots.length === 0) { %>
-          <p class="empty-state" data-i18n="empty_blocked">Kapatılmış bir takvim saati bulunmuyor.</p>
-        <% } else { %>
-          <table class="cases-table" style="margin-top: 20px;">
-            <thead>
-              <tr>
-                <th data-i18n="manage_col_date">Tarih</th>
-                <th data-i18n="manage_col_closed_time">Kapatılan Saat</th>
-                <th style="text-align: right;" data-i18n="manage_col_action">İşlem</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% blockedSlots.forEach(function(slot) { %>
-                <tr>
-                  <td><span data-i18n-date="<%= slot.Date %>"><%= new Date(slot.Date).toLocaleDateString('tr-TR') %></span></td>
-                  <td><strong><%= slot.Time %></strong></td>
-                  <td style="text-align: right;">
-                    <form action="/lawyer/blocked-slots/<%= slot._id %>/delete" method="POST" class="inline-form">
-                      <button type="submit" class="btn btn-small" data-i18n="manage_slot_open">Tekrar Aç</button>
-                    </form>
-                  </td>
-                </tr>
-              <% }); %>
-            </tbody>
-          </table>
-        </div>
-        <% } %>
-      </section>
+        <!-- KAYITLI KULLANICI LİSTESİ TABLOSU (TAM GENİŞLİK) -->
+        <section class="dashboard-section">
+          <h2 data-i18n="manage_user_list">Kayıtlı Kullanıcı Listesi</h2>
+          <% if (allUsers.length === 0) { %>
+            <p class="empty-state" data-i18n="empty_users">Henüz kayıtlı kullanıcı bulunmuyor.</p>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="cases-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="dash_case_member">Kullanıcı Adı</th>
+                    <th data-i18n="contact_email_lbl">E-posta</th>
+                    <th data-i18n="manage_col_role">Rol</th>
+                    <th data-i18n="manage_col_change_email">E-posta Güncelle</th>
+                    <th data-i18n="manage_col_change_username">Kullanıcı Adı Değiştir</th>
+                    <th data-i18n="manage_col_change_password">Şifre Güncelle</th>
+                    <th style="text-align: right;" data-i18n="dash_actions">İşlem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% allUsers.forEach(function(member) { %>
+                    <tr>
+                      <td><strong><%= member.Username || "—" %></strong></td>
+                      <td><%= member.Email %></td>
+                      <td>
+                        <% if (member.Role === 'lawyer') { %>
+                          <span class="status-badge" style="background: #3F678C; color: #FFFFFF;" data-i18n="role_lawyer_badge">Avukat (Admin)</span>
+                        <% } else { %>
+                          <span class="status-badge" style="background: #E2E8F0; color: #334155;" data-i18n="role_member_badge">Müvekkil</span>
+                        <% } %>
+                      </td>
+                      <td>
+                        <form action="/lawyer/members/<%= member._id %>/email" method="POST" class="inline-edit-form">
+                          <input type="email" name="email" value="<%= member.Email %>" placeholder="Yeni e-posta" data-i18n-placeholder="manage_new_email" required />
+                          <button type="submit" class="btn btn-small" data-i18n="dash_update">Güncelle</button>
+                        </form>
+                      </td>
+                      <td>
+                        <form action="/lawyer/members/<%= member._id %>/username" method="POST" class="inline-edit-form">
+                          <input type="text" name="username" value="<%= member.Username || '' %>" placeholder="Yeni ad" data-i18n-placeholder="manage_new_username" required />
+                          <button type="submit" class="btn btn-small" data-i18n="dash_update">Güncelle</button>
+                        </form>
+                      </td>
+                      <td>
+                        <form action="/lawyer/members/<%= member._id %>/password" method="POST" class="inline-edit-form">
+                          <input type="password" name="password" placeholder="Yeni şifre" data-i18n-placeholder="manage_new_password" minlength="6" required />
+                          <button type="submit" class="btn btn-small" data-i18n="dash_update">Güncelle</button>
+                        </form>
+                      </td>
+                      <td style="text-align: right;">
+                        <form action="/lawyer/members/<%= member._id %>/delete" method="POST" class="delete-member-form inline-form">
+                          <input type="hidden" name="force" value="false" />
+                          <button
+                            type="button"
+                            class="btn btn-small btn-danger"
+                            data-i18n="dash_delete"
+                            onclick="confirmMemberDelete(this, <%= caseCountByMember[member._id.toString()] || 0 %>)"
+                          >
+                            Sil
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </section>
+      </div>
     </main>
 
     <script>
+      function switchManageTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+      }
+
       function confirmMemberDelete(button, caseCount) {
         const form = button.closest("form");
         const forceInput = form.querySelector('input[name="force"]');
@@ -324,6 +386,7 @@
         }
       }
     </script>
+    <%- include('../partials/chat-bar') %>
     <script src="/JS/i18n.js"></script>
   </body>
 </html>

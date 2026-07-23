@@ -205,9 +205,19 @@ const translations = {
     "lawyer_exp_mehmet_demir": "20+ Yıl",
     "lawyer_expertise_mehmet_demir": "İş Hukuku",
     "lawyer_about_mehmet_demir": "2005 yılından bu yana ceza hukuku, ticaret hukuku ve iş hukuku alanlarında faaliyet göstermektedir. İşçi ve işveren haklarının korunmasında uzmanlaşmış, uzlaşmacı yaklaşımı ile bilinmektedir.",
-    "lawyer_education_mehmet_demir": "İstanbul Üniversitesi Hukuk Fakültesi mezunudur. İş hukuku ve sosyal güvenlik hukuku alanlarında kapsamlı deneyime sahiptir."
+    "lawyer_education_mehmet_demir": "İstanbul Üniversitesi Hukuk Fakültesi mezunudur. İş hukuku ve sosyal güvenlik hukuku alanlarında kapsamlı deneyime sahiptir.",
+    "msg_bar_title": "Mesajlar",
+    "msg_search_placeholder": "Kişilerde ara...",
+    "msg_type_placeholder": "Mesajınızı yazın...",
+    "msg_loading": "Kişiler yükleniyor...",
+    "msg_select_contact": "Sohbet seçin."
   },
   "en": {
+    "msg_bar_title": "Messages",
+    "msg_search_placeholder": "Search contacts...",
+    "msg_type_placeholder": "Type a message...",
+    "msg_loading": "Loading contacts...",
+    "msg_select_contact": "Select a chat.",
     "nav_home": "Home",
     "nav_about": "About Us",
     "nav_team": "Our Team",
