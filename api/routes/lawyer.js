@@ -15,7 +15,8 @@ router.use(isAuthenticated, isLawyer);
 
 async function getDashboardData() {
   const cases = await Case.find().populate("Member").sort({ CreatedAt: -1 });
-  const members = await User.find({ Role: "member" }).sort({ Username: 1 });
+  const allUsers = await User.find().sort({ Role: 1, Username: 1 });
+  const members = allUsers.filter((u) => u.Role === "member");
   const appointments = await Appointment.find()
     .populate("Member")
     .sort({ RequestedDate: 1 });
@@ -31,6 +32,7 @@ async function getDashboardData() {
 
   return {
     cases,
+    allUsers,
     members,
     appointments,
     blockedSlots,
@@ -110,10 +112,10 @@ router.get("/manage", async (req, res) => {
   res.render("lawyer/manage", data);
 });
 
-// ============ ÜYE EKLEME ============
+// ============ KULLANICI / ÜYE EKLEME ============
 router.post("/members", async (req, res) => {
   try {
-    const { email, password, username } = req.body;
+    const { email, password, username, role } = req.body;
 
     if (!email || !password || !username) {
       const data = await getDashboardData();
@@ -142,12 +144,13 @@ router.post("/members", async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, 10);
+    const userRole = role === "lawyer" ? "lawyer" : "member";
 
     await User.create({
       Email: email,
       Password: hash,
       Username: username,
-      Role: "member",
+      Role: userRole,
     });
 
     res.redirect("/lawyer/manage");
@@ -162,7 +165,7 @@ router.post("/members", async (req, res) => {
     }
     return res.status(500).render("lawyer/manage", {
       ...data,
-      error: "Üye kaydedilirken bir hata oluştu.",
+      error: "Kullanıcı kaydedilirken bir hata oluştu.",
     });
   }
 });
@@ -212,6 +215,43 @@ router.post("/members/:id/delete", async (req, res) => {
     res.status(500).render("lawyer/manage", {
       ...data,
       error: "Üye silinirken bir hata oluştu.",
+    });
+  }
+});
+
+
+// ============ ÜYE E-POSTA GÜNCELLEME ============
+router.post("/members/:id/email", async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      const data = await getDashboardData();
+      return res.status(400).render("lawyer/manage", {
+        ...data,
+        error: "E-posta adresi boş olamaz.",
+      });
+    }
+
+    const existing = await User.findOne({
+      Email: email.toLowerCase(),
+      _id: { $ne: req.params.id },
+    });
+    if (existing) {
+      const data = await getDashboardData();
+      return res.status(400).render("lawyer/manage", {
+        ...data,
+        error: "Bu e-posta adresi başka bir üye tarafından kullanılıyor.",
+      });
+    }
+
+    await User.findByIdAndUpdate(req.params.id, { Email: email.toLowerCase() });
+    res.redirect("/lawyer/manage");
+  } catch (err) {
+    console.error(err);
+    const data = await getDashboardData();
+    res.status(500).render("lawyer/manage", {
+      ...data,
+      error: "E-posta adresi güncellenirken bir hata oluştu.",
     });
   }
 });

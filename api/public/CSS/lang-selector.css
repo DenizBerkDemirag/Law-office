@@ -1,0 +1,126 @@
+/* ==========================================================================
+   LANGUAGE SELECTOR WIDGET STYLES
+   ========================================================================== */
+
+.lang-selector {
+  position: relative;
+  display: inline-block;
+  margin-left: 12px;
+}
+
+.lang-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.navbar .lang-btn {
+  color: var(--text-main, #0F172A);
+  background: rgba(91, 139, 182, 0.08);
+  border: 1px solid rgba(91, 139, 182, 0.2);
+}
+
+.navbar .lang-btn:hover {
+  background: var(--primary, #5B8BB6);
+  color: #FFFFFF;
+  border-color: var(--primary, #5B8BB6);
+  transform: translateY(-1px);
+}
+
+.lang-flag {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.lang-code {
+  letter-spacing: 0.05em;
+}
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #FFFFFF;
+  border-radius: 14px;
+  box-shadow: 0 14px 40px -6px rgba(15, 23, 42, 0.18);
+  border: 1px solid #E2E8F0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 150px;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.rtl .lang-menu {
+  right: auto;
+  left: 0;
+}
+
+.lang-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.lang-menu button {
+  background: transparent;
+  border: none;
+  padding: 9px 14px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1E293B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s ease;
+  width: 100%;
+}
+
+body.rtl .lang-menu button {
+  text-align: right;
+}
+
+.lang-menu button:hover {
+  background: #F1F5F9;
+  color: #5B8BB6;
+}
+
+.lang-menu button span {
+  font-size: 16px;
+}
+
+/* RTL Global Support */
+body.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+body.rtl .nav-right {
+  flex-direction: row-reverse;
+}
+
+body.rtl .hero-actions {
+  flex-direction: row-reverse;
+}
+
+body.rtl .contact-item {
+  flex-direction: row-reverse;
+}

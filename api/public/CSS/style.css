@@ -1,497 +1,803 @@
-/* ===========================
-   SOFT LAW OFFICE THEME
-=========================== */
+/* ==========================================================================
+   ALTINBAŞ AVUKATLIK & DANIŞMANLIK BÜROSU - DESIGN SYSTEM & MAIN STYLES
+   Primary Brand Color: #5B8BB6
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --primary: #556070;
-  --primary-dark: #475362;
+  /* Brand Color Palette */
+  --primary: #5B8BB6;
+  --primary-dark: #3F678C;
+  --primary-light: #7BA6CC;
+  --primary-subtle: rgba(91, 139, 182, 0.08);
+  --primary-glow: rgba(91, 139, 182, 0.25);
 
-  --secondary: #c2a77d;
+  --navy: #0F172A;
+  --navy-surface: #1E293B;
+  --navy-light: #334155;
 
-  --bg: #f8f9fb;
+  --gold: #C5A059;
+  --gold-light: #E2B866;
+  --gold-subtle: rgba(197, 160, 89, 0.12);
 
-  --card: #ffffff;
+  --bg: #F8FAFC;
+  --card-bg: #FFFFFF;
+  
+  --text-main: #0F172A;
+  --text-body: #334155;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
 
-  --text: #374151;
+  --border: #E2E8F0;
+  --border-focus: #5B8BB6;
 
-  --text-light: #7a818b;
+  /* Status Tokens */
+  --success: #10B981;
+  --success-bg: #ECFDF5;
+  --warning: #F59E0B;
+  --warning-bg: #FFFBEB;
+  --danger: #EF4444;
+  --danger-bg: #FEF2F2;
 
-  --border: #e4e7ec;
+  /* Shadows & Elevate */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
 
-  --success: #7bb58d;
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 45px -10px rgba(15, 23, 42, 0.12);
+  --shadow-gold: 0 10px 25px rgba(197, 160, 89, 0.2);
 
-  --warning: #d7b26d;
-
-  --danger: #d98c8c;
-
-  --radius: 16px;
-
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Reset & Global Elements */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Segoe UI", sans-serif;
-
-  background: var(--bg);
-
-  color: var(--text);
-}
-
-/* NAVBAR */
-
-.navbar {
-  background: rgba(255, 255, 255, 0.85);
-
-  backdrop-filter: blur(12px);
-
-  padding: 10px 120px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  border-bottom: 1px solid var(--border);
-
-  position: sticky;
-
-  top: 0;
-
-  z-index: 1000;
-}
-
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 100px;
 }
 
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cinzel', serif;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+}
+
+/* Anchor Scroll Margins */
 #hakkimizda,
-#ekibimiz {
-  scroll-margin-top: 120px;
+#ekibimiz,
+#hizmetler,
+#iletisim {
+  scroll-margin-top: 100px;
 }
 
-#hizmetler {
-  scroll-margin-top: 80px;
+/* ==========================================================================
+   NAVIGATION BAR
+   ========================================================================== */
+.navbar {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 12px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
 }
-
-/* LEFT */
 
 .nav-left {
   display: flex;
-
   align-items: center;
-
-  margin-right: 20px;
 }
 
-.nav-left a {
+.logo-brand {
+  display: flex;
+  align-items: center;
   text-decoration: none;
-
-  color: var(--primary);
-
-  font-size: 28px;
-
-  font-weight: 700;
-
-  line-height: 0.8;
+  gap: 12px;
 }
 
-/* Menü */
+.logo-brand img.logo-img {
+  height: 52px;
+  width: auto;
+  transition: var(--transition-fast);
+}
+
+.logo-brand:hover img.logo-img {
+  transform: scale(1.02);
+}
 
 .nav-right {
   display: flex;
-
   align-items: center;
-
-  width: 100%;
+  gap: 28px;
 }
 
 .nav-right ul {
-  margin-left: flex;
-
   display: flex;
-
   align-items: center;
-
   list-style: none;
-
-  gap: 10px;
-
-  flex: 1;
+  gap: 24px;
 }
 
-/* Menü linkleri */
-
 .nav-right ul a {
-  color: var(--text-light);
-
+  color: var(--text-body);
   text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 4px;
+  position: relative;
+  transition: var(--transition-fast);
+}
 
-  font-size: 14px;
-
-  font-weight: 500;
-
-  padding: 10px 4px;
-
-  transition: 0.25s;
+.nav-right ul a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: var(--transition-fast);
+  transform: translateX(-50%);
+  border-radius: var(--radius-full);
 }
 
 .nav-right ul a:hover {
   color: var(--primary);
 }
 
-/* Giriş butonu */
+.nav-right ul a:hover::after {
+  width: 100%;
+}
 
 .login-btn {
-  margin-left: auto;
-
-  background: var(--secondary);
-
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #FFFFFF !important;
   text-decoration: none !important;
-
-  color: white !important;
-
-  padding: 5px 10px;
-
-  border-radius: 999px;
-
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
   font-size: 14px;
-
-  font-weight: 600;
-
-  transition: 0.25s;
-
-  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 14px var(--primary-glow);
+  transition: var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .login-btn:hover {
-  background: #b59a72;
-
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(91, 139, 182, 0.4);
+  background: linear-gradient(135deg, #6A9AC7 0%, var(--primary-dark) 100%);
 }
 
-/* CONTENT */
-
-.container {
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero-section {
+  position: relative;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.78) 100%), 
+              url('/Fotograflar/hero_law_office.jpg') center/cover no-repeat;
+  padding: 110px 6% 130px;
+  color: #FFFFFF;
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
-  gap: 30px;
-
-  width: 90%;
-
-  padding: 0px 120px;
-
-  margin-top: 40px;
-
-  margin-bottom: 200px;
+  gap: 40px;
+  border-bottom: 3px solid var(--gold);
 }
 
-/* Sol taraf */
-
-.about-left {
-  flex: 4;
+.hero-content {
+  max-width: 720px;
 }
 
-.about-left h4 {
-  font-size: 24px;
-
-  margin-bottom: 20px;
-
-  color: var(--primary);
-}
-
-.about-left p {
-  color: var(--text-light);
-
-  line-height: 1.4;
-
-  font-size: 20px;
-}
-
-/* Sağ taraf */
-
-.about-right {
-  flex: 1;
-
-  display: flex;
-
-  justify-content: center;
-}
-
-.about-right img {
-  width: 100%;
-
-  max-width: 400px;
-
-  border-radius: 20px;
-
-  object-fit: cover;
-
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-}
-
-.footer {
-  color: white;
-  padding: 0px 120px;
-}
-
-/* Responsive */
-
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .about-right {
-    justify-content: center;
-  }
-}
-
-/* Takım alanı */
-
-.team-section {
-  width: 85%;
-
-  margin: 10px auto;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 10px;
-}
-
-.team-card {
-  flex: 1;
-
-  display: flex;
-
-  flex-direction: column;
-
+.hero-badge {
+  display: inline-flex;
   align-items: center;
-
-  text-align: center;
-
-  background: var(--card);
-
-  padding: 60px;
-
-  border-radius: 0px;
-
-  box-shadow: var(--shadow);
-
-  text-decoration: none;
-
-  color: inherit;
-
-  transition: 0.3s;
-
-  cursor: pointer;
-}
-
-.team-card:hover {
-  transform: translateY(-8px);
-
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-}
-
-.team-card img {
-  width: 100%;
-
-  max-width: 240px;
-
-  height: 320px;
-
-  object-fit: cover;
-
-  border-radius: 16px;
-
+  gap: 8px;
+  background: var(--gold-subtle);
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  color: var(--gold-light);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   margin-bottom: 24px;
 }
 
-.team-card h3 {
-  color: var(--primary);
-
-  margin-bottom: 10px;
-
-  font-size: 22px;
-}
-
-.team-card p {
-  color: var(--text-light);
-
-  line-height: 1.6;
-}
-/* Kart grubu */
-
-.cards {
-  width: 85%;
-
-  margin: 10px auto;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 10px;
-}
-
-/* Kart */
-
-.card {
-  flex: 1;
-
-  background: var(--card);
-
-  padding: 32px;
-
-  border-radius: 20px;
-
-  box-shadow: var(--shadow);
-
-  text-align: center;
-
-  transition: 0.3s;
-  height: 70%;
-}
-
-.card:hover {
-  transform: translateY(-8px);
-}
-
-/* İkon */
-
-.icon {
-  font-size: 60px;
-
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #FFFFFF;
   margin-bottom: 20px;
 }
 
-.card-title {
+.hero-title span {
+  color: var(--primary-light);
+  position: relative;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: #CBD5E1;
+  line-height: 1.7;
+  margin-bottom: 36px;
+  font-weight: 400;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-hero-primary {
+  background: var(--primary);
+  color: #FFFFFF;
+  padding: 14px 32px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 8px 25px var(--primary-glow);
+  transition: var(--transition-normal);
+}
+
+.btn-hero-primary:hover {
+  background: var(--primary-light);
+  transform: translateY(-3px);
+}
+
+.btn-hero-outline {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  padding: 14px 32px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: var(--transition-normal);
+}
+
+.btn-hero-outline:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #FFFFFF;
+  transform: translateY(-3px);
+}
+
+/* Hero Stats Counter Bar */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: -50px auto 70px;
+  padding: 0 6%;
+  position: relative;
+  z-index: 10;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  padding: 24px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  text-align: center;
+  transition: var(--transition-normal);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary);
+}
+
+.stat-number {
+  font-family: 'Cinzel', serif;
+  font-size: 36px;
+  font-weight: 700;
   color: var(--primary);
-
-  margin-bottom: 16px;
+  margin-bottom: 4px;
 }
 
-.card p {
-  color: var(--text-light);
+.stat-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
 
+/* ==========================================================================
+   ABOUT SECTION
+   ========================================================================== */
+.about-section {
+  padding: 80px 6%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.about-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-tag {
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.about-left h2 {
+  font-size: 36px;
+  line-height: 1.25;
+  margin-bottom: 24px;
+}
+
+.about-left p {
+  color: var(--text-body);
+  font-size: 16px;
   line-height: 1.8;
+  margin-bottom: 28px;
 }
-
-/* Telefon-info */
 
 .contact-info {
-  padding: 40px 40px;
+  margin-top: 12px;
 }
 
 .contact-info a {
   text-decoration: none;
-
-  color: var(--primary);
-
+  color: var(--navy);
   font-weight: 700;
-
-  padding: 12px 22px;
-
-  border-radius: 100px;
-
-  background: #eef2f7;
-
-  display: inline-block;
-
-  transition: 0.3s;
+  font-size: 16px;
+  padding: 14px 28px;
+  border-radius: var(--radius-full);
+  background: var(--primary-subtle);
+  border: 1px solid rgba(91, 139, 182, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: var(--transition-normal);
 }
 
 .contact-info a:hover {
-  background: var(--secondary);
-
-  color: white;
+  background: var(--primary);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--primary-glow);
 }
 
-/* İletişim */
+.about-right-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  position: relative;
+}
+
+.about-right-grid img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 4px solid #FFFFFF;
+}
+
+/* ==========================================================================
+   TEAM SECTION
+   ========================================================================== */
+.team-wrapper {
+  background: var(--navy);
+  padding: 100px 6%;
+  color: #FFFFFF;
+  position: relative;
+}
+
+.team-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 60px;
+}
+
+.team-header h2 {
+  color: #FFFFFF;
+  font-size: 38px;
+  margin-bottom: 14px;
+}
+
+.team-header p {
+  color: #94A3B8;
+  font-size: 16px;
+}
+
+.team-section {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+}
+
+.team-card {
+  background: var(--navy-surface);
+  border: 1px solid var(--navy-light);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.team-card img {
+  width: 180px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition-normal);
+}
+
+.team-card:hover img {
+  border-color: var(--gold);
+  transform: scale(1.04);
+}
+
+.team-card h3 {
+  color: #FFFFFF;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.team-card p.role {
+  color: var(--gold-light);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.team-card span.badge {
+  background: var(--primary-subtle);
+  color: var(--primary-light);
+  border: 1px solid rgba(91, 139, 182, 0.3);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   SERVICES SECTION
+   ========================================================================== */
+.services-wrapper {
+  padding: 100px 6%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.services-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 60px;
+}
+
+.services-header h2 {
+  font-size: 38px;
+  margin-bottom: 14px;
+}
+
+.services-header p {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 40px 32px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  text-align: left;
+  transition: var(--transition-normal);
+  position: relative;
+  top: 0;
+}
+
+.card:hover {
+  top: -8px;
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.icon-box {
+  width: 64px;
+  height: 64px;
+  background: var(--primary-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin-bottom: 24px;
+  color: var(--primary);
+  border: 1px solid rgba(91, 139, 182, 0.15);
+}
+
+.card-title {
+  color: var(--navy);
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.card p {
+  color: var(--text-body);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   CONTACT SECTION
+   ========================================================================== */
+.contact-wrapper {
+  background: #F1F5F9;
+  padding: 90px 6%;
+  border-top: 1px solid var(--border);
+}
 
 .contact-container {
-  width: 85%;
-
-  max-width: 1400px;
-
-  margin: 80px auto;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: flex-start;
-
-  gap: 100px;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 50px;
+  align-items: stretch;
 }
 
-/* Sol taraf */
-
 .contact-about-left {
-  flex: 1;
-
-  min-width: 280px;
+  background: var(--card-bg);
+  padding: 44px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
 }
 
 .contact-about-left h2 {
-  color: var(--primary);
+  font-size: 32px;
+  margin-bottom: 24px;
+  color: var(--navy);
+}
 
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: 20px;
 }
 
-.contact-about-left p {
-  margin-bottom: 12px;
-
-  line-height: 1.8;
+.contact-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
-/* Sağ taraf */
+.contact-detail h4 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+
+.contact-detail p {
+  font-size: 15px;
+  color: var(--text-body);
+}
 
 .map-container {
-  flex: 2;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  height: 100%;
+  min-height: 380px;
 }
 
 .map-container iframe {
   width: 100%;
-
-  height: 400px;
-
+  height: 100%;
+  min-height: 380px;
   border: none;
-
-  border-radius: 20px;
-
-  box-shadow: var(--shadow);
 }
 
-/* TABLE */
-
-.table {
-  width: 100%;
-
-  border-collapse: collapse;
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.footer {
+  background: var(--navy);
+  color: #94A3B8;
+  padding: 60px 6% 30px;
+  border-top: 4px solid var(--primary);
 }
 
-.table th {
-  color: var(--primary);
-
-  background: #eef2f7;
+.footer-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
 }
 
-.table th,
-.table td {
-  padding: 16px;
+.footer-brand h3 {
+  color: #FFFFFF;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
 
-  border-bottom: 1px solid var(--border);
+.footer-brand p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.footer-col h4 {
+  color: #FFFFFF;
+  font-size: 16px;
+  margin-bottom: 16px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.footer-col ul {
+  list-style: none;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+  color: #94A3B8;
+  text-decoration: none;
+  font-size: 14px;
+  transition: var(--transition-fast);
+}
+
+.footer-col ul li a:hover {
+  color: var(--primary-light);
+}
+
+.footer-bottom {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--navy-light);
+  text-align: center;
+  font-size: 13px;
+  color: #64748B;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 80px 6% 100px;
+  }
+
+  .hero-title {
+    font-size: 38px;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-container {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 4%;
+  }
+
+  .nav-right ul {
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .login-btn {
+    margin-left: 0;
+  }
+
+  .hero-title {
+    font-size: 30px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
 }

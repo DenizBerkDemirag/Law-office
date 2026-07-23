@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="520" height="120">
+  <defs>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B8BB6" />
+      <stop offset="100%" stop-color="#3F678C" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2B866" />
+      <stop offset="100%" stop-color="#C5A059" />
+    </linearGradient>
+    <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#5B8BB6" flood-opacity="0.25" />
+    </filter>
+  </defs>
+  
+  <!-- Emblem Icon: Scales of Justice inside Emblem Shield -->
+  <g transform="translate(10, 10)" filter="url(#glow)">
+    <!-- Base Shield / Hexagon Frame -->
+    <path d="M 50 5 L 88 24 L 88 66 C 88 88 50 98 50 98 C 50 98 12 88 12 66 L 12 24 Z" 
+          fill="url(#primaryGrad)" stroke="url(#goldGrad)" stroke-width="2.5" />
+    
+    <!-- Inner Scale Pillar -->
+    <path d="M 50 22 L 50 78 M 38 78 L 62 78" 
+          stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" />
+    
+    <!-- Balance Beam -->
+    <path d="M 28 34 Q 50 31 72 34" 
+          stroke="url(#goldGrad)" stroke-width="3.5" fill="none" stroke-linecap="round" />
+    <circle cx="50" cy="32.5" r="4.5" fill="#FFFFFF" />
+    
+    <!-- Left Scale Pan -->
+    <path d="M 28 34 L 20 54 M 28 34 L 36 54" stroke="#FFFFFF" stroke-width="1.8" />
+    <path d="M 16 54 Q 28 62 40 54 Z" fill="url(#goldGrad)" />
+    
+    <!-- Right Scale Pan -->
+    <path d="M 72 34 L 64 54 M 72 34 L 80 54" stroke="#FFFFFF" stroke-width="1.8" />
+    <path d="M 60 54 Q 72 62 84 54 Z" fill="url(#goldGrad)" />
+  </g>
+  
+  <!-- Brand Typography -->
+  <text x="125" y="58" font-family="'Cinzel', 'Playfair Display', 'Times New Roman', serif" 
+        font-size="36" font-weight="700" letter-spacing="4" fill="#0F172A">
+    ALTINBAŞ
+  </text>
+  
+  <text x="127" y="84" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', sans-serif" 
+        font-size="12.5" font-weight="600" letter-spacing="6" fill="#5B8BB6">
+    HUKUK &amp; DANIŞMANLIK BÜROSU
+  </text>
+  
+  <!-- Subtle Separator Line -->
+  <line x1="127" y1="92" x2="480" y2="92" stroke="#E2E8F0" stroke-width="1" />
+</svg>

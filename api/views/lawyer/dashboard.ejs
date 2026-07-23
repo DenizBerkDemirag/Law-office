@@ -1,36 +1,90 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" data-i18n-title="page_title_lawyer_dash">
   <head>
+    <link rel="icon" type="image/svg+xml" href="/Fotograflar/altinbas-logo.svg" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/CSS/style.css" />
     <link rel="stylesheet" href="/CSS/style-dashboard.css" />
-    <title>Büro Yönetim Paneli</title>
+    <link rel="stylesheet" href="/CSS/lang-selector.css" />
+    <title>Büro Yönetim Paneli — Altınbaş Avukatlık Bürosu</title>
   </head>
   <body>
-    <div class="navbar">
+    <header class="navbar">
       <div class="nav-left">
-        <a href="/lawyer/dashboard">Altınbaş Avukat Bürosu — Yönetim Paneli</a>
+        <a href="/lawyer/dashboard" class="brand-title">
+          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" style="height: 36px; filter: brightness(0) invert(1);" />
+          <span data-i18n="nav_dashboard">— Yönetim Paneli</span>
+        </a>
       </div>
       <div class="nav-right">
-        <a href="/lawyer/manage" class="btn btn-primary">Kayıt</a>
+        <a href="/lawyer/manage" class="btn btn-primary" data-i18n="dash_manage_btn">Kayıt &amp; Yönetim</a>
         <form action="/logout" method="POST" class="inline-form">
-          <button type="submit" class="link-button">Çıkış Yap</button>
+          <button type="submit" class="link-button" data-i18n="dash_logout">Çıkış Yap</button>
         </form>
+
+        <div class="lang-selector">
+          <button type="button" class="lang-btn" id="langDropdownBtn" style="color: #FFFFFF; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+            <span class="lang-flag" id="currentLangFlag">🇹🇷</span>
+            <span class="lang-code" id="currentLangCode">TR</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="lang-menu" id="langMenu">
+            <button type="button" onclick="setLanguage('tr')"><span>🇹🇷</span> Türkçe</button>
+            <button type="button" onclick="setLanguage('en')"><span>🇬🇧</span> English</button>
+            <button type="button" onclick="setLanguage('de')"><span>🇩🇪</span> Deutsch</button>
+            <button type="button" onclick="setLanguage('fr')"><span>🇫🇷</span> Français</button>
+            <button type="button" onclick="setLanguage('es')"><span>🇪🇸</span> Español</button>
+            <button type="button" onclick="setLanguage('it')"><span>🇮🇹</span> Italiano</button>
+            <button type="button" onclick="setLanguage('ru')"><span>🇷🇺</span> Русский</button>
+            <button type="button" onclick="setLanguage('ar')"><span>🇸🇦</span> العربية</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </header>
 
     <main class="dashboard-container">
+      <!-- SUMMARY METRICS BAR -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <div>
+            <div class="metric-val"><%= cases ? cases.length : 0 %></div>
+            <div class="metric-lbl" data-i18n="m_total_cases">Listelenen Dava</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <div>
+            <div class="metric-val"><%= members ? members.length : 0 %></div>
+            <div class="metric-lbl" data-i18n="m_total_clients">Kayıtlı Müvekkil</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          </div>
+          <div>
+            <div class="metric-val">Altınbaş</div>
+            <div class="metric-lbl" data-i18n="portal_brand">Avukatlık Portalı</div>
+          </div>
+        </div>
+      </div>
+
       <section class="dashboard-section">
-        <h2>Tüm Davalar</h2>
+        <h2 data-i18n="dash_cases_title">Tüm Davalar ve Dosyalar</h2>
 
         <!-- ============ FİLTRE FORMU ============ -->
-        <form action="/lawyer/dashboard" method="GET" class="dashboard-form" style="margin-bottom: 20px;">
+        <form action="/lawyer/dashboard" method="GET" class="dashboard-form" style="margin-bottom: 24px;">
           <div class="form-row">
             <div class="form-group">
-              <label for="memberId">Müvekkile Göre Filtrele</label>
+              <label for="memberId" data-i18n="dash_case_member">Müvekkile Göre Filtrele</label>
               <select id="memberId" name="memberId">
-                <option value="">Tüm Müvekkiller</option>
+                <option value="" data-i18n="select_all_clients">Tüm Müvekkiller</option>
                 <% members.forEach(function(member) { %>
                   <option value="<%= member._id %>" <%= selectedMemberId === member._id.toString() ? "selected" : "" %>>
                     <%= member.Username || member.Email %>
@@ -39,14 +93,16 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="date">Tarihe Göre Filtrele</label>
+              <label for="date" data-i18n="member_date">Tarihe Göre Filtrele</label>
               <input type="date" id="date" name="date" value="<%= selectedDate %>" />
             </div>
-            <div class="form-group" style="justify-content: flex-end;">
-              <button type="submit" class="btn btn-primary">Filtrele</button>
-              <% if (selectedMemberId || selectedDate) { %>
-                <a href="/lawyer/dashboard" class="btn btn-small" style="margin-left: 8px;">Temizle</a>
-              <% } %>
+            <div class="form-group" style="justify-flex: flex-end; align-self: flex-end;">
+              <div style="display: flex; gap: 8px;">
+                <button type="submit" class="btn btn-primary" data-i18n="dash_filter">Filtrele</button>
+                <% if (selectedMemberId || selectedDate) { %>
+                  <a href="/lawyer/dashboard" class="btn btn-small" data-i18n="dash_clear_filters">Temizle</a>
+                <% } %>
+              </div>
             </div>
           </div>
         </form>
@@ -54,51 +110,57 @@
         <% if (cases.length === 0) { %>
           <p class="empty-state">
             <% if (selectedMemberId || selectedDate) { %>
-              Filtreye uygun dava bulunamadı.
+              <span data-i18n="empty_filter">Filtreye uygun dava bulunamadı.</span>
             <% } else { %>
-              Henüz kayıtlı dava bulunmuyor.
+              <span data-i18n="empty_cases">Henüz kayıtlı dava bulunmuyor.</span>
             <% } %>
           </p>
         <% } else { %>
           <% if (sortBy) { %>
-            <div style="margin-bottom: 10px;">
-              <a href="<%= clearSortUrl %>" class="btn btn-small">Sıralamayı Kaldır</a>
+            <div style="margin-bottom: 14px;">
+              <a href="<%= clearSortUrl %>" class="btn btn-small" data-i18n="dash_clear_filters">Sıralamayı Kaldır</a>
             </div>
           <% } %>
+          <div class="table-responsive">
           <table class="cases-table">
             <thead>
               <tr>
-                <th>Dosya No</th>
-                <th>Konu</th>
+                <th data-i18n="dash_case_no">Dosya No</th>
+                <th data-i18n="dash_case_subject">Konu</th>
                 <th>
                   <a href="<%= memberSortUrl %>" class="sortable-header">
-                    Müvekkil<% if (sortBy === "member") { %> <%= sortOrder === "desc" ? "▼" : "▲" %><% } %>
+                    <span data-i18n="dash_case_member">Müvekkil</span><% if (sortBy === "member") { %> <%= sortOrder === "desc" ? "▼" : "▲" %><% } %>
                   </a>
                 </th>
                 <th>
                   <a href="<%= dateSortUrl %>" class="sortable-header">
-                    Kayıt Tarihi<% if (sortBy === "date") { %> <%= sortOrder === "desc" ? "▼" : "▲" %><% } %>
+                    <span data-i18n="member_date">Kayıt Tarihi</span><% if (sortBy === "date") { %> <%= sortOrder === "desc" ? "▼" : "▲" %><% } %>
                   </a>
                 </th>
-                <th></th>
+                <th style="text-align: right;" data-i18n="dash_actions">İşlem</th>
               </tr>
             </thead>
             <tbody>
               <% cases.forEach(function(caseItem) { %>
                 <tr>
-                  <td><%= caseItem.FileNumber %></td>
+                  <td><strong><%= caseItem.FileNumber %></strong></td>
                   <td><%= caseItem.Subject %></td>
                   <td><%= caseItem.Member ? (caseItem.Member.Username || caseItem.Member.Email) : "—" %></td>
-                  <td><%= new Date(caseItem.CreatedAt).toLocaleDateString('tr-TR') %></td>
-                  <td>
-                    <a href="/lawyer/cases/<%= caseItem._id %>" class="btn btn-small">Detay</a>
+                  <td><span data-i18n-date="<%= caseItem.CreatedAt %>"><%= new Date(caseItem.CreatedAt).toLocaleDateString('tr-TR') %></span></td>
+                  <td style="text-align: right;">
+                    <a href="/lawyer/cases/<%= caseItem._id %>" class="btn btn-small">
+                      <span data-i18n="dash_detail">İncele &amp; Belgeler</span>
+                    </a>
                   </td>
                 </tr>
               <% }); %>
             </tbody>
           </table>
+        </div>
         <% } %>
       </section>
     </main>
+
+    <script src="/JS/i18n.js"></script>
   </body>
 </html>

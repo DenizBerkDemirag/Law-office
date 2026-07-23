@@ -1,23 +1,46 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" data-i18n-title="page_title_member_dash">
   <head>
+    <link rel="icon" type="image/svg+xml" href="/Fotograflar/altinbas-logo.svg" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/CSS/style.css" />
     <link rel="stylesheet" href="/CSS/style-dashboard.css" />
-    <title>Davalarım</title>
+    <link rel="stylesheet" href="/CSS/lang-selector.css" />
+    <title>Müvekkil Portalı — Altınbaş Avukatlık Bürosu</title>
   </head>
   <body>
-    <div class="navbar">
+    <header class="navbar">
       <div class="nav-left">
-        <a href="/member/dashboard">Altınbaş Avukat Bürosu — Davalarım</a>
+        <a href="/member/dashboard" class="brand-title">
+          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" style="height: 36px; filter: brightness(0) invert(1);" />
+          <span data-i18n="footer_portal">— Müvekkil Portalı</span>
+        </a>
       </div>
       <div class="nav-right">
         <form action="/logout" method="POST" class="inline-form">
-          <button type="submit" class="link-button">Çıkış Yap</button>
+          <button type="submit" class="link-button" data-i18n="dash_logout">Çıkış Yap</button>
         </form>
+
+        <div class="lang-selector">
+          <button type="button" class="lang-btn" id="langDropdownBtn" style="color: #FFFFFF; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+            <span class="lang-flag" id="currentLangFlag">🇹🇷</span>
+            <span class="lang-code" id="currentLangCode">TR</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="lang-menu" id="langMenu">
+            <button type="button" onclick="setLanguage('tr')"><span>🇹🇷</span> Türkçe</button>
+            <button type="button" onclick="setLanguage('en')"><span>🇬🇧</span> English</button>
+            <button type="button" onclick="setLanguage('de')"><span>🇩🇪</span> Deutsch</button>
+            <button type="button" onclick="setLanguage('fr')"><span>🇫🇷</span> Français</button>
+            <button type="button" onclick="setLanguage('es')"><span>🇪🇸</span> Español</button>
+            <button type="button" onclick="setLanguage('it')"><span>🇮🇹</span> Italiano</button>
+            <button type="button" onclick="setLanguage('ru')"><span>🇷🇺</span> Русский</button>
+            <button type="button" onclick="setLanguage('ar')"><span>🇸🇦</span> العربية</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </header>
 
     <main class="dashboard-container">
       <% if (typeof error !== "undefined" && error) { %>
@@ -25,50 +48,90 @@
       <% } %>
 
       <section class="dashboard-section">
-        <h2>Davalarım</h2>
+        <h2 data-i18n="member_cases_title">Takipteki Dava Dosyalarım</h2>
 
         <% if (cases.length === 0) { %>
-          <p class="empty-state">Şu an kayıtlı bir davanız bulunmuyor.</p>
+          <p class="empty-state" data-i18n="empty_member_cases">Şu an adınıza kayıtlı aktif bir dava dosyası bulunmuyor.</p>
         <% } else { %>
+          <div class="table-responsive">
           <table class="cases-table">
             <thead>
               <tr>
-                <th>Dosya No</th>
-                <th>Konu</th>
-                <th>Kayıt Tarihi</th>
-                <th></th>
+                <th data-i18n="dash_case_no">Dosya No (Esas No)</th>
+                <th data-i18n="dash_case_subject">Dava Konusu</th>
+                <th data-i18n="member_date">Kayıt Tarihi</th>
+                <th style="text-align: right;" data-i18n="dash_actions">Detay</th>
               </tr>
             </thead>
             <tbody>
               <% cases.forEach(function(caseItem) { %>
                 <tr class="clickable-row" onclick="window.location='/member/cases/<%= caseItem._id %>'">
-                  <td><%= caseItem.FileNumber %></td>
+                  <td><strong><%= caseItem.FileNumber %></strong></td>
                   <td><%= caseItem.Subject %></td>
-                  <td><%= new Date(caseItem.CreatedAt).toLocaleDateString('tr-TR') %></td>
-                  <td>
-                    <a href="/member/cases/<%= caseItem._id %>" class="btn btn-small">Detay</a>
+                  <td><span data-i18n-date="<%= caseItem.CreatedAt %>"><%= new Date(caseItem.CreatedAt).toLocaleDateString('tr-TR') %></span></td>
+                  <td style="text-align: right;">
+                    <a href="/member/cases/<%= caseItem._id %>" class="btn btn-small">
+                      <span data-i18n="dash_detail">Dosyayı İncele</span>
+                    </a>
                   </td>
                 </tr>
               <% }); %>
             </tbody>
           </table>
+        </div>
+        <% } %>
+      </section>
+
+      <!-- ============ RANDEVU TALEPLERİM VE DURUMLARI ============ -->
+      <section class="dashboard-section">
+        <h2 data-i18n="member_appt_history">Randevu Talepleriniz ve Durumları</h2>
+
+        <% if (!appointments || appointments.length === 0) { %>
+          <p class="empty-state" data-i18n="empty_appts">Henüz bir randevu talebiniz bulunmuyor.</p>
+        <% } else { %>
+          <div class="table-responsive">
+          <table class="cases-table">
+            <thead>
+              <tr>
+                <th data-i18n="manage_appt_datetime">Talep Edilen Tarih &amp; Saat</th>
+                <th data-i18n="member_note">Talep Notu</th>
+                <th data-i18n="member_status">Durum / Sonuç</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% appointments.forEach(function(appointment) { %>
+                <tr>
+                  <td>
+                    <strong>
+                      <span data-i18n-datetime="<%= appointment.RequestedDate %>">
+                        <%= new Date(appointment.RequestedDate).toLocaleString('tr-TR') %>
+                      </span>
+                    </strong>
+                  </td>
+                  <td><%= appointment.Note || "—" %></td>
+                  <td>
+                    <span class="status-badge status-<%= appointment.Status %>" data-i18n="status_<%= appointment.Status %>">
+                      <%= appointment.Status === "pending" ? "Bekliyor" : appointment.Status === "approved" ? "Onaylandı" : "Reddedildi" %>
+                    </span>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
         <% } %>
       </section>
 
       <!-- ============ RANDEVU TALEPLERİM ============ -->
       <section class="dashboard-section">
-        <h2>Randevu İste</h2>
-
-        <% if (typeof error !== "undefined" && error) { %>
-          <div class="alert alert-error"><%= error %></div>
-        <% } %>
+        <h2 data-i18n="member_appt_title">Avukatlarımızdan Randevu Talep Et</h2>
 
         <form action="/member/appointments" method="POST" class="dashboard-form" id="appointmentForm">
           <div class="form-row">
             <div class="form-group">
-              <label for="date">Gün Seçin</label>
+              <label for="date" data-i18n="member_date">Gün Seçin</label>
               <select id="date" name="date" required>
-                <option value="" disabled selected>Bir gün seçin</option>
+                <option value="" disabled selected data-i18n="select_a_day">Bir gün seçin</option>
                 <% upcomingDates.forEach(function(d) { %>
                   <option value="<%= d.value %>"><%= d.label %></option>
                 <% }); %>
@@ -76,52 +139,55 @@
             </div>
 
             <div class="form-group">
-              <label for="time">Saat Seçin</label>
+              <label for="time" data-i18n="member_time">Saat Seçin</label>
               <select id="time" name="time" required disabled>
-                <option value="" selected>Önce bir gün seçin</option>
+                <option value="" selected data-i18n="select_a_day_first">Önce bir gün seçin</option>
               </select>
             </div>
-
-            <div class="form-group" style="flex: 2;">
-              <label for="note">Not (opsiyonel)</label>
-              <input type="text" id="note" name="note" placeholder="Görüşmek istediğiniz konu hakkında kısa bir not" />
-            </div>
           </div>
-          <button type="submit" class="btn btn-primary">Randevu Talep Et</button>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="note" data-i18n="member_note">Talep Notu (İsteğe Bağlı)</label>
+            <input type="text" id="note" name="note" placeholder="Konu hakkında kısa bilgi verebilirsiniz..." data-i18n-placeholder="ph_note_hint" />
+          </div>
+
+          <button type="submit" class="btn btn-primary" data-i18n="member_appt_send">Randevu Talebi Gönder</button>
         </form>
       </section>
     </main>
-      <script>
-        document.getElementById("date").addEventListener("change", async function () {
-          const selectedDate = this.value;
-          const timeSelect = document.getElementById("time");
 
-          timeSelect.disabled = true;
-          timeSelect.innerHTML = '<option value="">Yükleniyor...</option>';
+    <script>
+      document.getElementById("date").addEventListener("change", async function () {
+        const selectedDate = this.value;
+        const timeSelect = document.getElementById("time");
 
-          try {
-            const res = await fetch(`/member/available-times?date=${selectedDate}`);
-            const data = await res.json();
+        timeSelect.disabled = true;
+        timeSelect.innerHTML = '<option value="">' + t("loading_times") + '</option>';
 
-            if (!data.times || data.times.length === 0) {
-              timeSelect.innerHTML = '<option value="">Bu gün için uygun saat yok</option>';
-              return;
-            }
+        try {
+          const res = await fetch(`/member/available-times?date=${selectedDate}`);
+          const data = await res.json();
 
-            timeSelect.innerHTML = '<option value="" disabled selected>Bir saat seçin</option>';
-            data.times.forEach(function (time) {
-              const option = document.createElement("option");
-              option.value = time;
-              option.textContent = time;
-              timeSelect.appendChild(option);
-            });
-
-            timeSelect.disabled = false;
-          } catch (err) {
-            console.error(err);
-            timeSelect.innerHTML = '<option value="">Saatler yüklenemedi</option>';
+          if (!data.times || data.times.length === 0) {
+            timeSelect.innerHTML = '<option value="">' + t("no_times_available") + '</option>';
+            return;
           }
-        });
-      </script>
+
+          timeSelect.innerHTML = '<option value="" disabled selected>' + t("select_a_time") + '</option>';
+          data.times.forEach(function (time) {
+            const option = document.createElement("option");
+            option.value = time;
+            option.textContent = time;
+            timeSelect.appendChild(option);
+          });
+
+          timeSelect.disabled = false;
+        } catch (err) {
+          console.error(err);
+          timeSelect.innerHTML = '<option value="">' + t("times_load_error") + '</option>';
+        }
+      });
+    </script>
+    <script src="/JS/i18n.js"></script>
   </body>
 </html>

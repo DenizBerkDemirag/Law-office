@@ -1,16 +1,44 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" data-i18n-title="page_title_login">
   <head>
+    <link rel="icon" type="image/svg+xml" href="/Fotograflar/altinbas-logo.svg" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/CSS/style-login.css" />
-    <title>Giriş</title>
+    <link rel="stylesheet" href="/CSS/lang-selector.css" />
+    <title>Giriş — Altınbaş Avukatlık Bürosu</title>
   </head>
   <body>
-    <div class="login-card">
-      <h1 class="login-title">Giriş Yap</h1>
+    <!-- Top Right Language Switcher -->
+    <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+      <div class="lang-selector">
+        <button type="button" class="lang-btn" id="langDropdownBtn" style="background: rgba(15,23,42,0.06); color: #0F172A; border: 1px solid #CBD5E1;">
+          <span class="lang-flag" id="currentLangFlag">🇹🇷</span>
+          <span class="lang-code" id="currentLangCode">TR</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="lang-menu" id="langMenu">
+          <button type="button" onclick="setLanguage('tr')"><span>🇹🇷</span> Türkçe</button>
+          <button type="button" onclick="setLanguage('en')"><span>🇬🇧</span> English</button>
+          <button type="button" onclick="setLanguage('de')"><span>🇩🇪</span> Deutsch</button>
+          <button type="button" onclick="setLanguage('fr')"><span>🇫🇷</span> Français</button>
+          <button type="button" onclick="setLanguage('es')"><span>🇪🇸</span> Español</button>
+          <button type="button" onclick="setLanguage('it')"><span>🇮🇹</span> Italiano</button>
+          <button type="button" onclick="setLanguage('ru')"><span>🇷🇺</span> Русский</button>
+          <button type="button" onclick="setLanguage('ar')"><span>🇸🇦</span> العربية</button>
+        </div>
+      </div>
+    </div>
 
-      <p class="login-subtitle">Altınbaş Avukat Bürosu</p>
+    <div class="login-card">
+      <div class="login-brand-header">
+        <a href="/">
+          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu Logo" />
+        </a>
+      </div>
+
+      <h1 class="login-title" data-i18n="login_title">Giriş Yap</h1>
+      <p class="login-subtitle" data-i18n="login_subtitle">Avukat ve Müvekkil Yönetim Portalı</p>
 
       <% if (typeof error !== "undefined" && error) { %>
         <div class="alert alert-error"><%= error %></div>
@@ -18,34 +46,36 @@
 
       <form action="/login" method="POST">
         <div class="form-group">
-          <label for="email">E-posta</label>
+          <label for="email" data-i18n="contact_email_lbl">E-posta Adresi</label>
           <input
             type="email"
             id="email"
             name="email"
-            placeholder="E-posta adresiniz"
+            placeholder="ornek@altinbasavukat.com"
             required
             autofocus
           />
         </div>
 
         <div class="form-group">
-          <label for="password">Şifre</label>
+          <label for="password" data-i18n="label_password">Şifre</label>
           <input
             type="password"
             id="password"
             name="password"
-            placeholder="Şifreniz"
+            placeholder="••••••••"
             required
           />
         </div>
 
-        <button type="submit" class="login-btn">Giriş Yap</button>
+        <button type="submit" class="login-btn" data-i18n="login_btn">Güvenli Giriş Yap</button>
       </form>
 
       <div class="login-footer">
-        <a href="#">Şifremi Unuttum</a>
+        <a href="/" data-i18n="login_back">← Büromuzun Ana Sayfasına Dön</a>
       </div>
     </div>
+
+    <script src="/JS/i18n.js"></script>
   </body>
 </html>

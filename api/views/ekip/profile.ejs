@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="tr" data-i18n-title="page_title_profile_<%= lawyer.Slug.replace(/-/g, '_') %>">
+  <head>
+    <link rel="icon" type="image/svg+xml" href="/Fotograflar/altinbas-logo.svg" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="<%= lawyer.Name %> — <%= lawyer.Title %> | Altınbaş Avukatlık & Danışmanlık Bürosu" />
+    <link rel="stylesheet" href="/CSS/style.css" />
+    <link rel="stylesheet" href="/CSS/ekip-profile.css" />
+    <link rel="stylesheet" href="/CSS/lang-selector.css" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <!-- NAVIGATION BAR -->
+    <header class="navbar">
+      <div class="nav-left">
+        <a href="/" class="logo-brand">
+          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" class="logo-img" />
+        </a>
+      </div>
+
+      <nav class="nav-right">
+        <ul>
+          <li><a href="/" data-i18n="nav_home">Anasayfa</a></li>
+          <li><a href="/#hakkimizda" data-i18n="nav_about">Hakkımızda</a></li>
+          <li><a href="/#ekibimiz" class="active-link" data-i18n="nav_team">Ekibimiz</a></li>
+          <li><a href="/#hizmetler" data-i18n="nav_services">Hizmetlerimiz</a></li>
+          <li><a href="/#iletisim" data-i18n="nav_contact">İletişim</a></li>
+        </ul>
+
+        <% if (session && session.userId) { %>
+          <a href="<%= session.role === 'lawyer' ? '/lawyer/dashboard' : '/member/dashboard' %>" class="login-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span data-i18n="nav_dashboard">Yönetim Paneli</span>
+          </a>
+        <% } else { %>
+          <a href="/login" class="login-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+            <span data-i18n="nav_login">Müvekkil / Avukat Girişi</span>
+          </a>
+        <% } %>
+
+        <!-- LANGUAGE SELECTOR WIDGET -->
+        <div class="lang-selector">
+          <button type="button" class="lang-btn" id="langDropdownBtn">
+            <span class="lang-flag" id="currentLangFlag">🇹🇷</span>
+            <span class="lang-code" id="currentLangCode">TR</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="lang-menu" id="langMenu">
+            <button type="button" onclick="setLanguage('tr')"><span>🇹🇷</span> Türkçe</button>
+            <button type="button" onclick="setLanguage('en')"><span>🇬🇧</span> English</button>
+            <button type="button" onclick="setLanguage('de')"><span>🇩🇪</span> Deutsch</button>
+            <button type="button" onclick="setLanguage('fr')"><span>🇫🇷</span> Français</button>
+            <button type="button" onclick="setLanguage('es')"><span>🇪🇸</span> Español</button>
+            <button type="button" onclick="setLanguage('it')"><span>🇮🇹</span> Italiano</button>
+            <button type="button" onclick="setLanguage('ru')"><span>🇷🇺</span> Русский</button>
+            <button type="button" onclick="setLanguage('ar')"><span>🇸🇦</span> العربية</button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- PROFILE HERO -->
+    <section class="profile-hero">
+      <div class="profile-hero-overlay"></div>
+      <div class="profile-hero-content">
+        <nav class="breadcrumb">
+          <a href="/" data-i18n="nav_home">Anasayfa</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="/#ekibimiz" data-i18n="nav_team">Ekibimiz</a>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current" data-i18n="lawyer_name_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Name %></span>
+        </nav>
+        <h1 class="profile-hero-title" data-i18n="lawyer_name_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Name %></h1>
+        <p class="profile-hero-subtitle" data-i18n="lawyer_title_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Title %></p>
+        <span class="profile-hero-badge" data-i18n="lawyer_badge_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Badge %></span>
+      </div>
+    </section>
+
+    <!-- PROFILE MAIN CONTENT -->
+    <section class="profile-main">
+      <div class="profile-grid">
+
+        <!-- LEFT SIDEBAR — PHOTO & QUICK INFO -->
+        <aside class="profile-sidebar">
+          <div class="profile-photo-wrapper">
+            <img src="<%= lawyer.Photo %>" alt="<%= lawyer.Name %>" class="profile-photo" />
+            <div class="profile-photo-glow"></div>
+          </div>
+
+          <div class="profile-quick-info">
+            <div class="quick-info-item">
+              <div class="quick-info-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              </div>
+              <div class="quick-info-text">
+                <span class="quick-info-label" data-i18n="contact_phone_lbl">Telefon</span>
+                <span class="quick-info-value"><%= lawyer.Phone %></span>
+              </div>
+            </div>
+
+            <div class="quick-info-item">
+              <div class="quick-info-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </div>
+              <div class="quick-info-text">
+                <span class="quick-info-label" data-i18n="contact_email_lbl">E-posta</span>
+                <span class="quick-info-value"><%= lawyer.Email %></span>
+              </div>
+            </div>
+
+            <div class="quick-info-item">
+              <div class="quick-info-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+              <div class="quick-info-text">
+                <span class="quick-info-label" data-i18n="stat_exp">Deneyim</span>
+                <span class="quick-info-value" data-i18n="lawyer_exp_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Experience %></span>
+              </div>
+            </div>
+
+            <div class="quick-info-item">
+              <div class="quick-info-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <div class="quick-info-text">
+                <span class="quick-info-label" data-i18n="ekip_expertise">Uzmanlık</span>
+                <span class="quick-info-value" data-i18n="lawyer_expertise_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Expertise %></span>
+              </div>
+            </div>
+          </div>
+
+          <a href="/#iletisim" class="profile-cta-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span data-i18n="hero_btn_contact">İletişime Geçin</span>
+          </a>
+        </aside>
+
+        <!-- RIGHT CONTENT — DETAILS -->
+        <div class="profile-content">
+          <div class="profile-section">
+            <div class="profile-section-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="profile-section-body">
+              <h2 data-i18n="ekip_about">Hakkında</h2>
+              <p data-i18n="lawyer_about_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.About %></p>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <div class="profile-section-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 10 3 12 0v-5"></path></svg>
+            </div>
+            <div class="profile-section-body">
+              <h2 data-i18n="ekip_education">Özgeçmiş & Eğitim</h2>
+              <p data-i18n="lawyer_education_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Education %></p>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <div class="profile-section-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            </div>
+            <div class="profile-section-body">
+              <h2 data-i18n="ekip_expertise_area">Uzmanlık Alanı</h2>
+              <div class="expertise-badges">
+                <span class="expertise-badge" data-i18n="lawyer_expertise_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Expertise %></span>
+                <span class="expertise-badge" data-i18n="lawyer_badge_<%= lawyer.Slug.replace(/-/g, '_') %>"><%= lawyer.Badge %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- BACK TO TEAM CTA -->
+    <section class="back-to-team">
+      <a href="/#ekibimiz" class="back-to-team-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span data-i18n="ekip_back_team">Tüm Ekibi Görüntüle</span>
+      </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" style="height: 48px; margin-bottom: 16px; filter: brightness(0) invert(1);" />
+          <p data-i18n="footer_desc">Altınbaş Avukatlık &amp; Danışmanlık Bürosu, şeffaflık, dürüstlük ve hukuki mükemmeliyet prensipleri doğrultusunda hizmet vermektedir.</p>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_quick_links">Hızlı Bağlantılar</h4>
+          <ul>
+            <li><a href="/" data-i18n="nav_home">Anasayfa</a></li>
+            <li><a href="/#hakkimizda" data-i18n="nav_about">Hakkımızda</a></li>
+            <li><a href="/#ekibimiz" data-i18n="nav_team">Ekibimiz</a></li>
+            <li><a href="/#hizmetler" data-i18n="nav_services">Hizmetlerimiz</a></li>
+            <li><a href="/#iletisim" data-i18n="nav_contact">İletişim</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_portal">Müvekkil Portalı</h4>
+          <ul>
+            <li><a href="/login" data-i18n="footer_client_login">Müvekkil Girişi</a></li>
+            <li><a href="/login" data-i18n="footer_lawyer_login">Avukat Girişi</a></li>
+            <li><a href="/#iletisim" data-i18n="footer_book">Randevu Al</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <%= new Date().getFullYear() %> <span data-i18n="footer_rights">Altınbaş Avukatlık Bürosu. Tüm hakları saklıdır.</span></p>
+      </div>
+    </footer>
+
+    <!-- I18N JS ENGINE -->
+    <script src="/JS/i18n.js"></script>
+  </body>
+</html>

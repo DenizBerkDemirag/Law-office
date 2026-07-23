@@ -1,3 +1,44 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!doctype html>
+<html lang="tr" data-i18n-title="page_title_error">
+  <head>
+    <link rel="icon" type="image/svg+xml" href="/Fotograflar/altinbas-logo.svg" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/CSS/style.css" />
+    <link rel="stylesheet" href="/CSS/lang-selector.css" />
+    <title>Hata — Altınbaş Avukatlık Bürosu</title>
+  </head>
+  <body style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 24px; text-align: center; position: relative;">
+    <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+      <div class="lang-selector">
+        <button type="button" class="lang-btn" id="langDropdownBtn" style="background: rgba(15,23,42,0.06); color: #0F172A; border: 1px solid #CBD5E1;">
+          <span class="lang-flag" id="currentLangFlag">🇹🇷</span>
+          <span class="lang-code" id="currentLangCode">TR</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="lang-menu" id="langMenu">
+          <button type="button" onclick="setLanguage('tr')"><span>🇹🇷</span> Türkçe</button>
+          <button type="button" onclick="setLanguage('en')"><span>🇬🇧</span> English</button>
+          <button type="button" onclick="setLanguage('de')"><span>🇩🇪</span> Deutsch</button>
+          <button type="button" onclick="setLanguage('fr')"><span>🇫🇷</span> Français</button>
+          <button type="button" onclick="setLanguage('es')"><span>🇪🇸</span> Español</button>
+          <button type="button" onclick="setLanguage('it')"><span>🇮🇹</span> Italiano</button>
+          <button type="button" onclick="setLanguage('ru')"><span>🇷🇺</span> Русский</button>
+          <button type="button" onclick="setLanguage('ar')"><span>🇸🇦</span> العربية</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: white; padding: 48px; border-radius: 20px; box-shadow: var(--shadow-lg); max-width: 600px; width: 100%;">
+      <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Logo" style="height: 52px; margin-bottom: 24px;" />
+      <h1 style="color: var(--navy); font-size: 32px; margin-bottom: 12px;"><%= message %></h1>
+      <h2 style="color: var(--primary); font-size: 24px; margin-bottom: 24px;"><span data-i18n="error_code">Hata Kodu:</span> <%= error.status || 500 %></h2>
+      <% if (error.stack) { %>
+        <pre style="background: #F8FAFC; padding: 16px; border-radius: 10px; text-align: left; overflow-x: auto; font-size: 13px; color: #64748B; margin-bottom: 24px;"><%= error.stack %></pre>
+      <% } %>
+      <a href="/" class="btn-hero-primary" style="display: inline-block;" data-i18n="login_back">Anasayfaya Dön</a>
+    </div>
+
+    <script src="/JS/i18n.js"></script>
+  </body>
+</html>

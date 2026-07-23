@@ -1,18 +1,30 @@
-/* ===========================
-   LOGIN PAGE
-=========================== */
+/* ==========================================================================
+   ALTINBAŞ AVUKATLIK BÜROSU - LOGIN PAGE STYLES
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary: #556070;
-  --primary-dark: #475362;
-  --secondary: #c2a77d;
-  --bg: #f8f9fb;
-  --card: #ffffff;
-  --text: #374151;
-  --text-light: #7a818b;
-  --border: #e4e7ec;
+  --primary: #5B8BB6;
+  --primary-dark: #3F678C;
+  --primary-light: #7BA6CC;
+  --primary-glow: rgba(91, 139, 182, 0.3);
+
+  --navy: #0F172A;
+  --navy-surface: #1E293B;
+
+  --bg: #0F172A;
+  --card-bg: rgba(255, 255, 255, 0.96);
+
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --border: #E2E8F0;
+
+  --danger: #EF4444;
+  --danger-bg: #FEF2F2;
+
   --radius: 18px;
-  --shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+  --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -22,135 +34,148 @@
 }
 
 body {
-  font-family: "Segoe UI", sans-serif;
-
-  background: var(--bg);
-
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: radial-gradient(circle at 10% 20%, rgba(91, 139, 182, 0.25) 0%, transparent 40%),
+              radial-gradient(circle at 90% 80%, rgba(197, 160, 89, 0.15) 0%, transparent 40%),
+              linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   min-height: 100vh;
+  padding: 24px;
 }
-
-/* Kart */
 
 .login-card {
-  width: 420px;
-
-  background: var(--card);
-
-  padding: 45px;
-
-  border-radius: 20px;
-
+  width: 100%;
+  max-width: 440px;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  padding: 48px 40px;
+  border-radius: var(--radius);
   box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
 }
 
-/* Başlık */
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary) 0%, #C5A059 100%);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+
+.login-brand-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-brand-header img {
+  height: 58px;
+  width: auto;
+  margin-bottom: 16px;
+}
 
 .login-title {
   text-align: center;
-
-  color: var(--primary);
-
-  font-size: 32px;
-
-  margin-bottom: 10px;
+  font-family: 'Cinzel', serif;
+  color: var(--navy);
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
 .login-subtitle {
   text-align: center;
-
-  color: var(--text-light);
-
-  margin-bottom: 35px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 28px;
 }
 
-/* Form */
+.alert {
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alert-error {
+  background-color: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
 
 .form-group {
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-
   margin-bottom: 8px;
-
-  color: var(--primary);
-
+  color: var(--navy);
   font-weight: 600;
+  font-size: 14px;
 }
 
 .form-group input {
   width: 100%;
-
-  padding: 14px;
-
-  border: 1px solid var(--border);
-
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
   border-radius: 10px;
-
   font-size: 15px;
-
+  color: var(--text-main);
   outline: none;
-
-  transition: 0.3s;
+  background: #F8FAFC;
+  transition: all 0.25s ease;
 }
 
 .form-group input:focus {
-  border-color: var(--secondary);
-
-  box-shadow: 0 0 8px rgba(194, 167, 125, 0.3);
+  border-color: var(--primary);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px var(--primary-glow);
 }
-
-/* Buton */
 
 .login-btn {
   width: 100%;
-
   padding: 14px;
-
   border: none;
-
   border-radius: 10px;
-
-  background: var(--primary);
-
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
-
   font-size: 16px;
-
-  font-weight: 600;
-
+  font-weight: 700;
   cursor: pointer;
-
-  transition: 0.3s;
+  box-shadow: 0 4px 15px var(--primary-glow);
+  transition: all 0.25s ease;
+  margin-top: 8px;
 }
 
 .login-btn:hover {
-  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(91, 139, 182, 0.45);
+  background: linear-gradient(135deg, #6A9AC7 0%, var(--primary-dark) 100%);
 }
 
-/* Alt link */
-
 .login-footer {
-  margin-top: 25px;
-
+  margin-top: 24px;
   text-align: center;
 }
 
 .login-footer a {
   text-decoration: none;
-
-  color: var(--secondary);
-
+  color: var(--primary);
+  font-size: 14px;
   font-weight: 600;
+  transition: color 0.2s ease;
 }
 
 .login-footer a:hover {
+  color: var(--primary-dark);
   text-decoration: underline;
 }
