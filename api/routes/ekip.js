@@ -3,12 +3,12 @@ const router = express.Router();
 const config = require("../config");
 const Lawyer = require("../db/models/Lawyer");
 
-/* GET /ekip/:slug — Avukat profil sayfası */
+/* GET /ekip/:slug — Lawyer profile page */
 router.get("/:slug", async function (req, res, next) {
   const lawyer = await Lawyer.findOne({ Slug: req.params.slug });
 
   if (!lawyer) {
-    return next(); // 404'e düşer
+    return next(); // Falls back to 404
   }
 
   res.render("ekip/profile", {

@@ -7,7 +7,7 @@ const Lawyer = require("../db/models/Lawyer");
 
 router.use(isAuthenticated);
 
-// 1. İletişim Kurulabilecek Kişiler Listesi & Son Mesajlar
+// 1. Contacts List & Recent Messages
 router.get("/contacts", async (req, res) => {
   try {
     const currentUserId = req.session.userId;
@@ -15,18 +15,18 @@ router.get("/contacts", async (req, res) => {
 
     let targetUsers = [];
     if (currentUserRole === "lawyer") {
-      // Avukat ise müvekkilleri getir
+      // Fetch clients if lawyer
       targetUsers = await User.find({ _id: { $ne: currentUserId }, Role: "member" })
         .select("_id Username Email Role")
         .sort({ Username: 1 });
     } else {
-      // Müvekkil ise avukatları getir
+      // Fetch lawyers if client
       targetUsers = await User.find({ _id: { $ne: currentUserId }, Role: "lawyer" })
         .select("_id Username Email Role")
         .sort({ Username: 1 });
     }
 
-    // Ek olarak Lawyer tablosundan bilgi alıp isim güzelleştirme
+    // Additionally fetch info from Lawyer table and format names
     const lawyerDetails = await Lawyer.find();
     const lawyerEmailMap = {};
     lawyerDetails.forEach((l) => {
@@ -35,7 +35,7 @@ router.get("/contacts", async (req, res) => {
 
     const contacts = await Promise.all(
       targetUsers.map(async (u) => {
-        // Son mesajı bul
+        // Find last message
         const lastMsg = await Message.findOne({
           $or: [
             { Sender: currentUserId, Receiver: u._id },
@@ -43,7 +43,7 @@ router.get("/contacts", async (req, res) => {
           ],
         }).sort({ CreatedAt: -1 });
 
-        // Okunmamış mesaj sayısı
+        // Unread message count
         const unreadCount = await Message.countDocuments({
           Sender: u._id,
           Receiver: currentUserId,
@@ -77,7 +77,7 @@ router.get("/contacts", async (req, res) => {
       })
     );
 
-    // Son mesaj tarihine göre sırala (mesajlaşılmış olanlar üstte)
+    // Sort by last message date (conversations with recent messages on top)
     contacts.sort((a, b) => {
       if (a.lastMessageTime && b.lastMessageTime) {
         return new Date(b.lastMessageTime) - new Date(a.lastMessageTime);
@@ -94,7 +94,7 @@ router.get("/contacts", async (req, res) => {
   }
 });
 
-// 2. Belirli bir kullanıcı ile sohbet geçmişi
+// 2. Chat history with a specific user
 router.get("/chat/:userId", async (req, res) => {
   try {
     const currentUserId = req.session.userId;
@@ -118,13 +118,13 @@ router.get("/chat/:userId", async (req, res) => {
       }
     }
 
-    // Karşı taraftan gelen okunmamış mesajları okundu olarak güncelle
+    // Mark unread messages from the other user as read
     await Message.updateMany(
       { Sender: targetUserId, Receiver: currentUserId, IsRead: false },
       { $set: { IsRead: true } }
     );
 
-    // Mesaj geçmişini çek
+    // Fetch message history
     const messages = await Message.find({
       $or: [
         { Sender: currentUserId, Receiver: targetUserId },
@@ -160,7 +160,7 @@ router.get("/chat/:userId", async (req, res) => {
   }
 });
 
-// 3. Mesaj Gönder
+// 3. Send Message
 router.post("/send", async (req, res) => {
   try {
     const currentUserId = req.session.userId;
@@ -199,7 +199,7 @@ router.post("/send", async (req, res) => {
   }
 });
 
-// 4. Toplam okunmamış mesaj sayısı
+// 4. Total unread message count
 router.get("/unread-count", async (req, res) => {
   try {
     const currentUserId = req.session.userId;

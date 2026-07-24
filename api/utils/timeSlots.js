@@ -1,5 +1,5 @@
 const WORKING_START_HOUR = 9;
-const WORKING_END_HOUR = 18; // 17:30, son slot
+const WORKING_END_HOUR = 18; // 17:30, last slot
 
 function getAllTimeSlots() {
   const slots = [];

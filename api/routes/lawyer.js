@@ -42,7 +42,7 @@ async function getDashboardData() {
   };
 }
 
-// ============ DASHBOARD (sade) ============
+// ============ DASHBOARD (simple) ============
 router.get("/dashboard", async (req, res) => {
   const { memberId, date, sortBy, sortOrder } = req.query;
 
@@ -73,7 +73,7 @@ router.get("/dashboard", async (req, res) => {
 
   const members = await User.find({ Role: "member" }).sort({ Username: 1 });
 
-  // Sıralama linkleri için hazır URL'leri oluştur
+  // Generate ready URLs for sorting links
   function buildSortUrl(field) {
     const params = new URLSearchParams();
     if (memberId) params.set("memberId", memberId);
@@ -86,7 +86,7 @@ router.get("/dashboard", async (req, res) => {
     return `/lawyer/dashboard?${params.toString()}`;
   }
 
-  // Sıralamayı temizleyip sadece filtreleri koruyan URL
+  // URL that resets sorting and preserves only filters
   function buildClearSortUrl() {
     const params = new URLSearchParams();
     if (memberId) params.set("memberId", memberId);
@@ -107,13 +107,13 @@ router.get("/dashboard", async (req, res) => {
   });
 });
 
-// ============ YÖNETİM SAYFASI ============
+// ============ MANAGEMENT PAGE ============
 router.get("/manage", async (req, res) => {
   const data = await getDashboardData();
   res.render("lawyer/manage", data);
 });
 
-// ============ KULLANICI / ÜYE EKLEME ============
+// ============ USER / MEMBER ADDITION ============
 router.post("/members", async (req, res) => {
   try {
     const { email, password, username, role } = req.body;
@@ -171,7 +171,7 @@ router.post("/members", async (req, res) => {
   }
 });
 
-// ============ ÜYE SİLME ============
+// ============ MEMBER DELETION ============
 router.post("/members/:id/delete", async (req, res) => {
   try {
     const memberId = req.params.id;
@@ -200,7 +200,7 @@ router.post("/members/:id/delete", async (req, res) => {
             ArchivedAt: new Date(),
             ArchivedCaseFileNumber: caseItem.FileNumber,
             ArchivedCaseSubject: caseItem.Subject,
-            ArchivedMemberEmail: member.Email, // ⬅️ üye silinmeden önce yakalandı
+            ArchivedMemberEmail: member.Email, // ⬅️ caught before member deletion
             Case: null,
           },
         );
@@ -221,7 +221,7 @@ router.post("/members/:id/delete", async (req, res) => {
 });
 
 
-// ============ ÜYE E-POSTA GÜNCELLEME ============
+// ============ MEMBER EMAIL UPDATE ============
 router.post("/members/:id/email", async (req, res) => {
   try {
     const { email } = req.body;
@@ -257,7 +257,7 @@ router.post("/members/:id/email", async (req, res) => {
   }
 });
 
-// ============ ÜYE USERNAME GÜNCELLEME ============
+// ============ MEMBER USERNAME UPDATE ============
 router.post("/members/:id/username", async (req, res) => {
   try {
     const { username } = req.body;
@@ -293,7 +293,7 @@ router.post("/members/:id/username", async (req, res) => {
   }
 });
 
-// ============ ÜYE ŞİFRE GÜNCELLEME ============
+// ============ MEMBER PASSWORD UPDATE ============
 router.post("/members/:id/password", async (req, res) => {
   try {
     const { password } = req.body;
@@ -318,7 +318,7 @@ router.post("/members/:id/password", async (req, res) => {
   }
 });
 
-// ============ DAVA EKLEME ============
+// ============ CASE ADDITION ============
 router.post("/cases", async (req, res) => {
   try {
     const { memberId, fileNumber, subject } = req.body;
@@ -363,7 +363,7 @@ router.post("/cases", async (req, res) => {
   }
 });
 
-// ============ DAVA DÜZENLEME FORMU ============
+// ============ CASE EDIT FORM ============
 router.get("/cases/:id/edit", async (req, res) => {
   const caseItem = await Case.findById(req.params.id).populate("Member");
   if (!caseItem) return res.status(404).send("Dava bulunamadı.");
@@ -372,7 +372,7 @@ router.get("/cases/:id/edit", async (req, res) => {
   res.render("lawyer/caseEdit", { caseItem, members });
 });
 
-// ============ DAVA GÜNCELLEME ============
+// ============ CASE UPDATE ============
 router.post("/cases/:id/update", async (req, res) => {
   try {
     const { memberId, fileNumber, subject } = req.body;
@@ -404,7 +404,7 @@ router.post("/cases/:id/update", async (req, res) => {
   }
 });
 
-// ============ DAVA SİLME (belgeler arşivleniyor, silinmiyor) ============
+// ============ CASE DELETION (documents are archived, not deleted) ============
 router.post("/cases/:id/delete", async (req, res) => {
   try {
     const caseId = req.params.id;
@@ -436,7 +436,7 @@ router.post("/cases/:id/delete", async (req, res) => {
   }
 });
 
-// ============ DAVA DETAY (mevcut) ============
+// ============ CASE DETAIL (existing) ============
 router.get("/cases/:id", async (req, res) => {
   const caseItem = await Case.findById(req.params.id).populate("Member");
   if (!caseItem) return res.status(404).send("Dava bulunamadı.");
@@ -445,7 +445,7 @@ router.get("/cases/:id", async (req, res) => {
   res.render("lawyer/caseDetail", { caseItem, documents });
 });
 
-// ============ BELGE YÜKLEME (mevcut) ============
+// ============ DOCUMENT UPLOAD (existing) ============
 router.post(
   "/cases/:id/documents",
   (req, res, next) => {
@@ -492,7 +492,7 @@ router.post(
   },
 );
 
-// ============ BELGE İNDİRME/GÖRÜNTÜLEME (mevcut) ============
+// ============ DOCUMENT DOWNLOAD/VIEWING (existing) ============
 router.get("/documents/:id/download", async (req, res) => {
   try {
     const document = await Document.findById(req.params.id);
@@ -512,7 +512,7 @@ router.get("/documents/:id/download", async (req, res) => {
   }
 });
 
-// ============ ARŞİV ============
+// ============ ARCHIVE ============
 router.get("/archive", async (req, res) => {
   const archivedDocuments = await Document.find({ Archived: true }).sort({
     ArchivedAt: -1,
@@ -520,7 +520,7 @@ router.get("/archive", async (req, res) => {
   res.render("lawyer/archive", { archivedDocuments });
 });
 
-// ============ RANDEVU ONAYLAMA ============
+// ============ APPOINTMENT APPROVAL ============
 router.post("/appointments/:id/approve", async (req, res) => {
   try {
     await Appointment.findByIdAndUpdate(req.params.id, { Status: "approved" });
@@ -535,7 +535,7 @@ router.post("/appointments/:id/approve", async (req, res) => {
   }
 });
 
-// ============ RANDEVU REDDETME ============
+// ============ APPOINTMENT REJECTION ============
 router.post("/appointments/:id/reject", async (req, res) => {
   try {
     await Appointment.findByIdAndUpdate(req.params.id, { Status: "rejected" });
@@ -550,7 +550,7 @@ router.post("/appointments/:id/reject", async (req, res) => {
   }
 });
 
-// ============ SAAT KAPATMA (dolu işaretleme) ============
+// ============ TIME SLOT BLOCKING (mark as occupied) ============
 router.post("/blocked-slots", async (req, res) => {
   try {
     const { date, time } = req.body;
@@ -581,7 +581,7 @@ router.post("/blocked-slots", async (req, res) => {
   }
 });
 
-// ============ SAAT AÇMA (kapatmayı kaldırma) ============
+// ============ TIME SLOT UNBLOCKING (remove block) ============
 router.post("/blocked-slots/:id/delete", async (req, res) => {
   try {
     await BlockedSlot.findByIdAndDelete(req.params.id);

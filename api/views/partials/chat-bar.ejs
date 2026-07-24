@@ -1,9 +1,9 @@
 <% if (typeof session !== "undefined" && session && session.userId) { %>
-  <!-- Mesajlaşma Barı CSS & JS -->
+  <!-- Messaging Bar CSS & JS -->
   <link rel="stylesheet" href="/CSS/chat-bar.css" />
 
   <div class="chat-bar-wrapper" id="chatBarWrapper">
-    <!-- Tetikleyici Çubuk Header -->
+    <!-- Trigger Bar Header -->
     <div class="chat-bar-header" id="chatBarHeader">
       <div class="chat-bar-header-info">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -19,10 +19,10 @@
       </button>
     </div>
 
-    <!-- Açılan Gövde Penceresi -->
+    <!-- Expanded Body Window -->
     <div class="chat-bar-body" id="chatBarBody">
       <div class="chat-views">
-        <!-- 1. Kişiler Görünümü -->
+        <!-- 1. Contacts View -->
         <div class="chat-view-contacts" id="chatViewContacts">
           <div class="chat-search-box">
             <input type="text" class="chat-search-input" id="chatSearchInput" placeholder="Kişilerde ara..." data-i18n-placeholder="msg_search_placeholder" />
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <!-- 2. Sohbet Görünümü -->
+        <!-- 2. Chat View -->
         <div class="chat-view-messages" id="chatViewMessages">
           <div class="chat-convo-header">
             <button type="button" class="chat-back-btn" id="chatBackBtn" title="Geri">

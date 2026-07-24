@@ -18,7 +18,7 @@ router.get("/dashboard", async (req, res) => {
     Member: req.session.userId,
   }).sort({ CreatedAt: -1 });
 
-  // Önümüzdeki 14 gün için tarih listesi (bugün dahil)
+  // Date list for the next 14 days (including today)
   const upcomingDates = [];
   for (let i = 0; i < 14; i++) {
     const d = new Date();
@@ -37,7 +37,7 @@ router.get("/dashboard", async (req, res) => {
   res.render("member/dashboard", { cases, appointments, upcomingDates });
 });
 
-// Dava detay
+// Case details
 router.get("/cases/:id", async (req, res) => {
   const caseItem = await Case.findById(req.params.id).populate("Member");
 
@@ -51,7 +51,7 @@ router.get("/cases/:id", async (req, res) => {
   res.render("member/caseDetail", { caseItem, documents });
 });
 
-// Belge indirme
+// Document download
 router.get("/documents/:id/download", async (req, res) => {
   try {
     const document = await Document.findById(req.params.id).populate("Case");
@@ -78,7 +78,7 @@ router.get("/documents/:id/download", async (req, res) => {
   }
 });
 
-// ============ RANDEVU İSTEME ============
+// ============ APPOINTMENT REQUEST ============
 router.post("/appointments", async (req, res) => {
   try {
     const { date, time, note } = req.body;
@@ -117,7 +117,7 @@ router.post("/appointments", async (req, res) => {
       return await rerender("Tarih ve saat seçilmesi zorunludur.");
     }
 
-    // Sunucu tarafında da müsaitlik kontrolü — asıl güvenlik burada
+    // Server-side availability check — main security is here
     const blocked = await BlockedSlot.findOne({ Date: date, Time: time });
     if (blocked) {
       return await rerender(
@@ -146,7 +146,7 @@ router.post("/appointments", async (req, res) => {
   }
 });
 
-// ============ SEÇİLEN GÜN İÇİN MÜSAİT SAATLER (AJAX) ============
+// ============ AVAILABLE HOURS FOR SELECTED DAY (AJAX) ============
 router.get("/available-times", async (req, res) => {
   const { date } = req.query;
 
@@ -169,7 +169,7 @@ router.get("/available-times", async (req, res) => {
       const [hour, minute] = time.split(":").map(Number);
       const slotTime = new Date();
       slotTime.setHours(hour, minute, 0, 0);
-      if (slotTime <= now) return false; // bugünse, geçmiş saatleri filtrele
+      if (slotTime <= now) return false; // if today, filter past hours
     }
 
     return true;

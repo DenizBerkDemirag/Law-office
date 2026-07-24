@@ -10,7 +10,7 @@ const schema = new mongoose.Schema(
         return this.Role === "member";
       },
       unique: true,
-      sparse: true, // avukatlar Username girmeyecekse null/undefined çakışmasın diye
+      sparse: true, // so null/undefined won't collide if lawyers do not enter Username
     },
     Role: {
       type: String,

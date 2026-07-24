@@ -1,5 +1,5 @@
 /* ============================================================
-   AÇILABİLİR MESAJLAŞMA BARI (EXPANDABLE MESSAGING BAR) SCRIPT
+   EXPANDABLE MESSAGING BAR SCRIPT
    ============================================================ */
 
 (function () {
@@ -8,7 +8,7 @@
   let contactsData = [];
   let pollInterval = null;
 
-  // DOM Elemanları
+  // DOM Elements
   let wrapper, header, body, toggleBtn, unreadBadge;
   let contactsView, messagesView;
   let searchInput, contactsList;
@@ -17,12 +17,12 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     initDOM();
-    if (!wrapper) return; // Kullanıcı giriş yapmamış veya eleman yoksa çık
+    if (!wrapper) return; // Exit if user is not logged in or element does not exist
 
     bindEvents();
     fetchUnreadCount();
     
-    // Her 4 saniyede bir unread count & aktif sohbeti güncelle
+    // Update unread count & active chat every 4 seconds
     pollInterval = setInterval(() => {
       fetchUnreadCount();
       if (isBarOpen && activeContactId) {
@@ -60,9 +60,9 @@
   }
 
   function bindEvents() {
-    // Barı Aç / Kapat
+    // Toggle Bar
     header.addEventListener("click", (e) => {
-      if (e.target.closest("#chatBarToggleBtn")) return; // toggle button handler ile çakışmasın
+      if (e.target.closest("#chatBarToggleBtn")) return; // prevent conflict with toggle button handler
       toggleBar();
     });
     toggleBtn.addEventListener("click", (e) => {
@@ -70,7 +70,7 @@
       toggleBar();
     });
 
-    // İletişim Araması
+    // Contact Search
     if (searchInput) {
       searchInput.addEventListener("input", (e) => {
         const query = e.target.value.toLowerCase().trim();
@@ -78,14 +78,14 @@
       });
     }
 
-    // Sohbetten Çıkıp Kişi Listesine Dön
+    // Return to contact list from chat
     if (backBtn) {
       backBtn.addEventListener("click", () => {
         showContactsView();
       });
     }
 
-    // Mesaj Gönderme
+    // Send Message
     if (inputForm) {
       inputForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -116,7 +116,7 @@
     }
   }
 
-  // Okunmamış Sayısını Güncelle
+  // Update Unread Count
   async function fetchUnreadCount() {
     try {
       const res = await fetch("/messages/unread-count");
@@ -134,7 +134,7 @@
     }
   }
 
-  // Kişi Listesini Yükle
+  // Load Contact List
   async function loadContacts() {
     try {
       const res = await fetch("/messages/contacts");
@@ -149,20 +149,20 @@
     }
   }
 
-  // Kişileri Render Et
+  // Render Contacts
   function renderContacts(filterQuery = "") {
     if (!contactsList) return;
 
     let filtered = [];
     if (!filterQuery) {
-      // Mesaj yazılmayan kişiler varsayılan Chat kutusunda gözükmesin (sadece mesajlaşılmış olanlar)
+      // Contacts without messages should not appear in default Chat box (only those with messages)
       filtered = contactsData.filter((c) => c.lastMessage !== null && c.lastMessage !== undefined);
       if (filtered.length === 0) {
         contactsList.innerHTML = `<div class="chat-empty-msg" style="padding: 24px 16px; font-size: 13px; line-height: 1.5; color: var(--chat-text-muted);">Henüz aktif bir mesajlaşmanız bulunmuyor.<br><span style="color: var(--chat-gold); font-size: 12px; font-weight: 500; display: inline-block; margin-top: 6px;">Yeni bir kişi bulmak için arama çubuğuna yazabilirsiniz.</span></div>`;
         return;
       }
     } else {
-      // Yukardaki arama kısmı kişileri yazdıkça görüntülesin (eşleşen tüm kişiler)
+      // The search box above displays contacts as typed (all matching contacts)
       filtered = contactsData.filter(
         (c) =>
           c.name.toLowerCase().includes(filterQuery) ||
@@ -209,7 +209,7 @@
 
     contactsList.innerHTML = html;
 
-    // Tıklama olaylarını bağla
+    // Bind click events
     contactsList.querySelectorAll(".chat-contact-item").forEach((el) => {
       el.addEventListener("click", () => {
         const id = el.getAttribute("data-id");
@@ -218,7 +218,7 @@
     });
   }
 
-  // Sohbet Aç
+  // Open Chat
   function openChat(contactId) {
     activeContactId = contactId;
     contactsView.classList.add("slide-out");
@@ -234,7 +234,7 @@
     fetchUnreadCount();
   }
 
-  // Mesajları Yükle
+  // Load Messages
   async function loadChatMessages(contactId, isSilent = false) {
     try {
       if (!isSilent) {
@@ -244,7 +244,7 @@
       const data = await res.json();
 
       if (data.success) {
-        // Üst bilgi güncelle
+        // Update header info
         convoUserName.textContent = data.contact.name;
         convoUserRole.textContent = data.contact.roleTitle;
         if (convoUserAvatar) {
@@ -270,7 +270,7 @@
       return;
     }
 
-    // Scroll pozisyonu kontrolü
+    // Scroll position check
     const isAtBottom =
       messagesArea.scrollHeight - messagesArea.scrollTop <=
       messagesArea.clientHeight + 50;
@@ -295,7 +295,7 @@
     }
   }
 
-  // Mesaj Gönder
+  // Send Message
   async function sendMessage() {
     if (!activeContactId || !messageInput) return;
 
@@ -325,7 +325,7 @@
     }
   }
 
-  // Zaman Formatı
+  // Time Format
   function formatTime(dateStr) {
     if (!dateStr) return "";
     const d = new Date(dateStr);

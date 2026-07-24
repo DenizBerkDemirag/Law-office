@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema(
   {
-    Date: { type: String, required: true }, // "YYYY-MM-DD" formatında
-    Time: { type: String, required: true }, // "HH:MM" formatında
+    Date: { type: String, required: true }, // in "YYYY-MM-DD" format
+    Time: { type: String, required: true }, // in "HH:MM" format
   },
   {
     versionKey: false,
@@ -11,7 +11,7 @@ const schema = new mongoose.Schema(
   },
 );
 
-// Aynı gün+saat kombinasyonu iki kere kapatılamasın
+// Prevent closing the same date+time combination twice
 schema.index({ Date: 1, Time: 1 }, { unique: true });
 
 class BlockedSlot extends mongoose.Model {}

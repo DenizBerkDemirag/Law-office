@@ -15,7 +15,7 @@ const schema = new mongoose.Schema(
     ArchivedAt: { type: Date },
     ArchivedCaseFileNumber: { type: String },
     ArchivedCaseSubject: { type: String },
-    ArchivedMemberEmail: { type: String }, // ⬅️ yeni alan
+    ArchivedMemberEmail: { type: String }, // ⬅️ new field
   },
   {
     versionKey: false,

@@ -2,25 +2,25 @@ const path = require("path");
 const fs = require("fs");
 
 /**
- * Veritabanında saklanan dosya yolunu (mutlak veya göreceli, eski klasör yapısı dahil) 
- * mevcut sunucudaki güncel mutlak dosya yoluna dönüştürür.
+ * Converts the file path stored in the database (absolute or relative, including old folder structure) 
+ * to the current absolute file path on the existing server.
  * 
- * @param {string} storedPath - Veritabanındaki FilePath değeri
- * @returns {string|null} Bulunursa mutlak yol, bulunamazsa null
+ * @param {string} storedPath - FilePath value in the database
+ * @returns {string|null} Absolute path if found, null if not found
  */
 function getAbsoluteFilePath(storedPath) {
   if (!storedPath) return null;
 
-  // 1. Yol doğrudan mevcutsa (aynı bilgisayar ve aynı klasör yapısı)
+  // 1. If path exists directly (same computer and same folder structure)
   if (fs.existsSync(storedPath)) {
     return path.resolve(storedPath);
   }
 
-  // 2. Proje dizini taşınmış/yeniden adlandırılmışsa ("uploads" sonrasını al)
+  // 2. If project directory has been moved/renamed (take part after "uploads")
   const uploadsIdx = storedPath.indexOf("uploads");
   if (uploadsIdx !== -1) {
     const relPath = storedPath.substring(uploadsIdx);
-    // api ana dizinine göre yolu çöz
+    // Resolve path relative to api root directory
     const apiRootDir = path.resolve(__dirname, "..");
     const resolvedPath = path.resolve(apiRootDir, relPath);
     if (fs.existsSync(resolvedPath)) {

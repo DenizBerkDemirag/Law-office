@@ -2,7 +2,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-// İzin verilen dosya tipleri
+// Allowed file types
 const ALLOWED_MIME_TYPES = [
   "image/jpeg",
   "image/png",
@@ -14,7 +14,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Her davanın belgeleri kendi dosya no'suna göre ayrı klasörde
+    // Documents of each case are in a separate folder according to case ID
     const caseId = req.params.id;
     const uploadDir = path.join(__dirname, "..", "uploads", caseId);
 
@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    // Benzersiz dosya adı: timestamp + orijinal uzantı
+    // Unique filename: timestamp + original extension
     const ext = path.extname(file.originalname);
     const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
     cb(null, uniqueName);

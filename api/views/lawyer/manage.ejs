@@ -73,7 +73,7 @@
         </button>
       </div>
 
-      <!-- TAB 1: DAVA YÖNETİMİ -->
+      <!-- TAB 1: CASE MANAGEMENT -->
       <div id="tab-cases" class="tab-content active">
         <div class="dash-split-layout">
           <div class="dash-main-col">
@@ -148,7 +148,7 @@
         </div>
       </div>
 
-      <!-- TAB 2: RANDEVULAR VE TAKVİM -->
+      <!-- TAB 2: APPOINTMENTS AND CALENDAR -->
       <div id="tab-appts" class="tab-content">
         <div class="dash-split-layout">
           <div class="dash-main-col">
@@ -257,9 +257,9 @@
         </div>
       </div>
 
-      <!-- TAB 3: KULLANICI YÖNETİMİ (FULL WIDTH LAYOUT) -->
+      <!-- TAB 3: USER MANAGEMENT (FULL WIDTH LAYOUT) -->
       <div id="tab-users" class="tab-content">
-        <!-- YENİ KULLANICI EKLE FORMU (ÜST KISIM) -->
+        <!-- ADD NEW USER FORM (TOP SECTION) -->
         <section class="dashboard-section">
           <h2 data-i18n="manage_user_add">Yeni Kullanıcı (Müvekkil / Avukat) Ekle</h2>
           <form action="/lawyer/members" method="POST" class="dashboard-form">
@@ -290,7 +290,7 @@
           </form>
         </section>
 
-        <!-- KAYITLI KULLANICI LİSTESİ TABLOSU (TAM GENİŞLİK) -->
+        <!-- REGISTERED USER LIST TABLE (FULL WIDTH) -->
         <section class="dashboard-section">
           <h2 data-i18n="manage_user_list">Kayıtlı Kullanıcı Listesi</h2>
           <% if (allUsers.length === 0) { %>
