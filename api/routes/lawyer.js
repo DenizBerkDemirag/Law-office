@@ -10,6 +10,7 @@ const User = require("../db/models/User");
 const Appointment = require("../db/models/Appointment");
 const BlockedSlot = require("../db/models/BlockedSlot");
 const { getAllTimeSlots } = require("../utils/timeSlots");
+const { getAbsoluteFilePath } = require("../utils/filePath");
 
 router.use(isAuthenticated, isLawyer);
 
@@ -493,10 +494,22 @@ router.post(
 
 // ============ BELGE İNDİRME/GÖRÜNTÜLEME (mevcut) ============
 router.get("/documents/:id/download", async (req, res) => {
-  const document = await Document.findById(req.params.id);
-  if (!document) return res.status(404).send("Belge bulunamadı.");
+  try {
+    const document = await Document.findById(req.params.id);
+    if (!document) return res.status(404).send("Belge bulunamadı.");
 
-  res.sendFile(document.FilePath);
+    const absolutePath = getAbsoluteFilePath(document.FilePath);
+    if (!absolutePath) {
+      return res
+        .status(404)
+        .send("Fiziksel dosya sunucuda bulunamadı veya dosya kaydı eksik.");
+    }
+
+    res.sendFile(absolutePath);
+  } catch (err) {
+    console.error("Belge indirme hatası:", err);
+    res.status(500).send("Belge indirilirken bir hata oluştu.");
+  }
 });
 
 // ============ ARŞİV ============

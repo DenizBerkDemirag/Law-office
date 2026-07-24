@@ -6,6 +6,7 @@ const Document = require("../db/models/Document");
 const Appointment = require("../db/models/Appointment");
 const BlockedSlot = require("../db/models/BlockedSlot");
 const { getAllTimeSlots } = require("../utils/timeSlots");
+const { getAbsoluteFilePath } = require("../utils/filePath");
 
 router.use(isAuthenticated, isMember);
 
@@ -52,23 +53,29 @@ router.get("/cases/:id", async (req, res) => {
 
 // Belge indirme
 router.get("/documents/:id/download", async (req, res) => {
-  const document = await Document.findById(req.params.id).populate("Case");
-  if (!document) return res.status(404).send("Belge bulunamadı.");
+  try {
+    const document = await Document.findById(req.params.id).populate("Case");
+    if (!document) return res.status(404).send("Belge bulunamadı.");
 
-  if (!document.FilePath) {
-    return res
-      .status(410)
-      .send("Bu belgenin dosya kaydı eksik, indirilemiyor.");
+    if (
+      !document.Case ||
+      document.Case.Member.toString() !== req.session.userId.toString()
+    ) {
+      return res.status(403).send("Bu belgeye erişim yetkiniz yok.");
+    }
+
+    const absolutePath = getAbsoluteFilePath(document.FilePath);
+    if (!absolutePath) {
+      return res
+        .status(404)
+        .send("Fiziksel dosya sunucuda bulunamadı veya dosya kaydı eksik.");
+    }
+
+    res.sendFile(absolutePath);
+  } catch (err) {
+    console.error("Belge indirme hatası:", err);
+    res.status(500).send("Belge indirilirken bir hata oluştu.");
   }
-
-  if (
-    !document.Case ||
-    document.Case.Member.toString() !== req.session.userId.toString()
-  ) {
-    return res.status(403).send("Bu belgeye erişim yetkiniz yok.");
-  }
-
-  res.sendFile(document.FilePath);
 });
 
 // ============ RANDEVU İSTEME ============
