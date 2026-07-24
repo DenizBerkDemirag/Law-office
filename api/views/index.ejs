@@ -1,24 +1,295 @@
 <!doctype html>
 <html lang="tr">
-  <head>
-    <link rel="icon" type="image/svg+xml" href="/Fotograflar/altinbas-logo.svg" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Altınbaş Avukatlık & Danışmanlık Bürosu - Hukuki Danışmanlık, Dava Takibi ve Arabuluculuk Hizmetleri" />
-    <link rel="stylesheet" href="/CSS/style.css" />
-    <link rel="stylesheet" href="/CSS/lang-selector.css" />
-    <title><%= title %></title>
-  </head>
-  <body>
-    <!-- NAVIGATION BAR -->
-    <header class="navbar">
-      <div class="nav-left">
-        <a href="/" class="logo-brand">
-          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" class="logo-img" />
+
+<head>
+  <link rel="icon" type="image/svg+xml" href="/Fotograflar/altinbas-logo.svg" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Altınbaş Avukatlık & Danışmanlık Bürosu - Hukuki Danışmanlık, Dava Takibi ve Arabuluculuk Hizmetleri" />
+  <link rel="stylesheet" href="/CSS/style.css" />
+  <link rel="stylesheet" href="/CSS/lang-selector.css" />
+  <title>
+    <%= title %>
+  </title>
+</head>
+
+<body>
+  <!-- NAVIGATION BAR -->
+  <header class="navbar">
+    <div class="nav-left">
+      <a href="/" class="logo-brand">
+        <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" class="logo-img" />
+      </a>
+    </div>
+
+    <nav class="nav-right">
+      <ul>
+        <li><a href="/" data-i18n="nav_home">Anasayfa</a></li>
+        <li><a href="#hakkimizda" data-i18n="nav_about">Hakkımızda</a></li>
+        <li><a href="#ekibimiz" data-i18n="nav_team">Ekibimiz</a></li>
+        <li><a href="#hizmetler" data-i18n="nav_services">Hizmetlerimiz</a></li>
+        <li><a href="#iletisim" data-i18n="nav_contact">İletişim</a></li>
+      </ul>
+
+      <% if (session && session.userId) { %>
+        <a href="<%= session.role === 'lawyer' ? '/lawyer/dashboard' : '/member/dashboard' %>" class="login-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span data-i18n="nav_dashboard">Yönetim Paneli</span>
         </a>
+        <% } else { %>
+          <a href="/login" class="login-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+            <span data-i18n="nav_login">Müvekkil Girişi</span>
+          </a>
+          <% } %>
+
+            <!-- LANGUAGE SELECTOR WIDGET -->
+            <div class="lang-selector">
+              <button type="button" class="lang-btn" id="langDropdownBtn">
+                <span class="lang-flag" id="currentLangFlag">🇹🇷</span>
+                <span class="lang-code" id="currentLangCode">TR</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+              <div class="lang-menu" id="langMenu">
+                <button type="button" onclick="setLanguage('tr')"><span>🇹🇷</span> Türkçe</button>
+                <button type="button" onclick="setLanguage('en')"><span>🇬🇧</span> English</button>
+                <button type="button" onclick="setLanguage('de')"><span>🇩🇪</span> Deutsch</button>
+                <button type="button" onclick="setLanguage('fr')"><span>🇫🇷</span> Français</button>
+                <button type="button" onclick="setLanguage('es')"><span>🇪🇸</span> Español</button>
+                <button type="button" onclick="setLanguage('it')"><span>🇮🇹</span> Italiano</button>
+                <button type="button" onclick="setLanguage('ru')"><span>🇷🇺</span> Русский</button>
+                <button type="button" onclick="setLanguage('ar')"><span>🇸🇦</span> العربية</button>
+              </div>
+            </div>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span data-i18n="hero_badge">⚖️ HUKUKİ ÇÖZÜM &amp; MÜKEMMELİYET</span>
+      </div>
+      <h1 class="hero-title">
+        <span data-i18n="hero_title_1">Haklarınız Güvende, </span><span data-i18n="hero_title_2">Geleceğiniz Teminat
+          Altında</span>
+      </h1>
+      <p class="hero-subtitle" data-i18n="hero_subtitle">
+        Altınbaş Avukatlık Bürosu olarak, 20 yılı aşkın tecrübemiz ve uzman kadromuzla bireysel ve kurumsal
+        müvekkillerimize ulusal ve uluslararası standartlarda hukuki danışmanlık ve temsil hizmeti sağlıyoruz.
+      </p>
+      <div class="hero-actions">
+        <a href="#hizmetler" class="btn-hero-primary" data-i18n="hero_btn_services">Hizmetlerimiz İnceleyin</a>
+        <a href="#iletisim" class="btn-hero-outline" data-i18n="hero_btn_contact">İletişime Geçin</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERO STATS BAR -->
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-number">20+</div>
+      <div class="stat-label" data-i18n="stat_exp">Yıllık Büro Tecrübesi</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1,500+</div>
+      <div class="stat-label" data-i18n="stat_cases">Başarıyla Tamamlanan Dava</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">%99</div>
+      <div class="stat-label" data-i18n="stat_satisfaction">Müvekkil Memnuniyeti</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">7/24</div>
+      <div class="stat-label" data-i18n="stat_support">Hukuki Destek &amp; Danışmanlık</div>
+    </div>
+  </div>
+
+  <!-- ABOUT SECTION -->
+  <section id="hakkimizda" class="about-section">
+    <div class="container">
+      <div class="about-left">
+        <span class="section-tag" data-i18n="about_tag">Kurumsal Profilimiz</span>
+        <h2 data-i18n="about_title">Adalet ve Şeffaflık İlkesiyle Yanınızdayız</h2>
+        <p data-i18n="about_p1">
+          Altınbaş Avukat Bürosu, hukukun üstünlüğü ve etik değerler çerçevesinde müvekkillerine en yüksek kalitede
+          hukuki hizmet sunmak amacıyla kurulmuştur. Deneyimli avukat kadromuzla her türlü hukuki süreçte yenilikçi,
+          şeffaf ve sonuç odaklı çözümler üretiyoruz.
+        </p>
+        <p data-i18n="about_p2">
+          Ceza Hukuku, Ticaret Hukuku, Gayrimenkul Hukuku ve İş Hukuku başta olmak üzere geniş bir yelpazede danışmanlık
+          veriyor, dava süreçlerinizi başından sonuna kadar hassasiyetle takip ediyoruz.
+        </p>
+        <div class="contact-info">
+          <a href="tel:+902121234567" data-i18n="about_phone">
+            📞 Doğrudan İletişim: 0212 123 45 67
+          </a>
+        </div>
+      </div>
+      <div class="about-right-grid">
+        <img src="/Fotograflar/hero_law_office.jpg" alt="Altınbaş Avukatlık Bürosu Ofis" />
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM SECTION -->
+  <section id="ekibimiz" class="team-wrapper">
+    <div class="team-header">
+      <span class="section-tag" style="color: #7BA6CC;" data-i18n="team_tag">Uzman Kadromuz</span>
+      <h2 data-i18n="team_title">Deneyimli Avukat Ekibimiz</h2>
+      <p data-i18n="team_sub">Alanında uzman, dinamik ve disiplinli avukat kadromuzla hukuki haklarınızı en üst düzeyde
+        savunuyoruz.</p>
+    </div>
+
+    <div class="team-section">
+      <a href="/ekip/ahmet-altinbas" class="team-card">
+        <img src="/Fotograflar/lawyer_ahmet.jpg" alt="Av. Ahmet Altınbaş" />
+        <h3 data-i18n="lawyer_name_ahmet_altinbas">Av. Ahmet Altınbaş</h3>
+        <p class="role" data-i18n="lawyer_title_ahmet_altinbas">Kurucu ve Yönetici Avukat</p>
+        <span class="badge" data-i18n="lawyer_badge_ahmet_altinbas">Ticaret &amp; Şirketler Hukuku</span>
+      </a>
+
+      <a href="/ekip/elif-yilmaz" class="team-card">
+        <img src="/Fotograflar/lawyer_elif.jpg" alt="Av. Elif Yılmaz" />
+        <h3 data-i18n="lawyer_name_elif_yilmaz">Av. Elif Yılmaz</h3>
+        <p class="role" data-i18n="lawyer_title_elif_yilmaz">Kıdemli Avukat</p>
+        <span class="badge" data-i18n="lawyer_badge_elif_yilmaz">Ceza &amp; Ağır Ceza Hukuku</span>
+      </a>
+
+      <a href="/ekip/mehmet-demir" class="team-card">
+        <img src="/Fotograflar/lawyer_mehmet.jpg" alt="Av. Mehmet Demir" />
+        <h3 data-i18n="lawyer_name_mehmet_demir">Av. Mehmet Demir</h3>
+        <p class="role" data-i18n="lawyer_title_mehmet_demir">Uzman Avukat</p>
+        <span class="badge" data-i18n="lawyer_badge_mehmet_demir">İş &amp; Sosyal Güvenlik Hukuku</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SERVICES SECTION -->
+  <section id="hizmetler" class="services-wrapper">
+    <div class="services-header">
+      <span class="section-tag" data-i18n="services_tag">Faaliyet Alanlarımız</span>
+      <h2 data-i18n="services_title">Hukuki Hizmetlerimiz</h2>
+      <p data-i18n="services_sub">Geniş bir alana yayılan uzmanlık alanlarımız ile bireysel ve kurumsal ihtiyaçlarınıza
+        özel çözümler sunuyoruz.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon-box">⚖️</div>
+        <h3 class="card-title" data-i18n="service_1_title">Hukuki Danışmanlık</h3>
+        <p data-i18n="service_1_desc">Müvekkillerimize stratejik kararlarında riskleri en aza indiren sürekli hukuki
+          danışmanlık sağlıyoruz.</p>
       </div>
 
-      <nav class="nav-right">
+      <div class="card">
+        <div class="icon-box">📄</div>
+        <h3 class="card-title" data-i18n="service_2_title">Dava Takibi &amp; Savunma</h3>
+        <p data-i18n="service_2_desc">Tüm adli ve idari yargı mertebelerinde davalarınızı titizlikle takip ediyor ve
+          haklarınızı koruyoruz.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon-box">🤝</div>
+        <h3 class="card-title" data-i18n="service_3_title">Arabuluculuk &amp; Uzlaşma</h3>
+        <p data-i18n="service_3_desc">Uyuşmazlıkların mahkeme sürecine gitmeden hızlı, maliyetsiz ve dostane çözümü için
+          arabuluculuk yapıyoruz.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon-box">🏛️</div>
+        <h3 class="card-title" data-i18n="service_4_title">Ticaret &amp; Şirketler Hukuku</h3>
+        <p data-i18n="service_4_desc">Şirket kuruluşları, birleşme-devralma, sözleşme müzakereleri ve kurumsal yönetim
+          süreçlerinde tam destek.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon-box">📚</div>
+        <h3 class="card-title" data-i18n="service_5_title">Sözleşmeler Hukuku</h3>
+        <p data-i18n="service_5_desc">Uluslararası ve yerel her türlü ticari sözleşmenin hazırlanması, revize edilmesi
+          ve risk analizleri.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon-box">🛡️</div>
+        <h3 class="card-title" data-i18n="service_6_title">Önleyici Hukuk Desteği</h3>
+        <p data-i18n="service_6_desc">Olası uyuşmazlıklar ortaya çıkmadan önce hukuki altyapının güçlendirilmesi ve hak
+          kayıplarının önlenmesi.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section id="iletisim" class="contact-wrapper">
+    <div class="contact-container">
+      <div class="contact-about-left">
+        <span class="section-tag" data-i18n="contact_tag">Bize Ulaşın</span>
+        <h2 data-i18n="contact_title">İletişim &amp; Ofis Bilgileri</h2>
+
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-detail">
+            <h4 data-i18n="contact_address_lbl">Adres</h4>
+            <p data-i18n="contact_address_val">Altınbaş Plaza, No: 42, Levent / İstanbul, Türkiye</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-detail">
+            <h4 data-i18n="contact_phone_lbl">Telefon</h4>
+            <p data-i18n="contact_phone_val">0212 123 45 67 (Santral)</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-detail">
+            <h4 data-i18n="contact_email_lbl">E-posta</h4>
+            <p>bilgi@altinbasavukat.com</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">🕒</div>
+          <div class="contact-detail">
+            <h4 data-i18n="contact_hours_lbl">Çalışma Saatleri</h4>
+            <p data-i18n="contact_hours_val">Pazartesi - Cuma: 09:00 - 18:30</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3126.5926427206646!2d27.108041775913094!3d38.404666871833356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzjCsDI0JzE2LjgiTiAyN8KwMDYnMzguMiJF!5e0!3m2!1sen!2str!4v1782391006251!5m2!1sen!2str"
+          loading="lazy" title="Altınbaş Avukatlık Bürosu Konumu"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu"
+          style="height: 48px; margin-bottom: 16px; filter: brightness(0) invert(1);" />
+        <p data-i18n="footer_desc">Altınbaş Avukatlık &amp; Danışmanlık Bürosu, şeffaflık, dürüstlük ve hukuki
+          mükemmeliyet prensipleri doğrultusunda hizmet vermektedir.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_quick_links">Hızlı Bağlantılar</h4>
         <ul>
           <li><a href="/" data-i18n="nav_home">Anasayfa</a></li>
           <li><a href="#hakkimizda" data-i18n="nav_about">Hakkımızda</a></li>
@@ -26,320 +297,78 @@
           <li><a href="#hizmetler" data-i18n="nav_services">Hizmetlerimiz</a></li>
           <li><a href="#iletisim" data-i18n="nav_contact">İletişim</a></li>
         </ul>
-
-        <% if (session && session.userId) { %>
-          <a href="<%= session.role === 'lawyer' ? '/lawyer/dashboard' : '/member/dashboard' %>" class="login-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span data-i18n="nav_dashboard">Yönetim Paneli</span>
-          </a>
-        <% } else { %>
-          <a href="/login" class="login-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-            <span data-i18n="nav_login">Müvekkil / Avukat Girişi</span>
-          </a>
-        <% } %>
-
-        <!-- LANGUAGE SELECTOR WIDGET -->
-        <div class="lang-selector">
-          <button type="button" class="lang-btn" id="langDropdownBtn">
-            <span class="lang-flag" id="currentLangFlag">🇹🇷</span>
-            <span class="lang-code" id="currentLangCode">TR</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-          <div class="lang-menu" id="langMenu">
-            <button type="button" onclick="setLanguage('tr')"><span>🇹🇷</span> Türkçe</button>
-            <button type="button" onclick="setLanguage('en')"><span>🇬🇧</span> English</button>
-            <button type="button" onclick="setLanguage('de')"><span>🇩🇪</span> Deutsch</button>
-            <button type="button" onclick="setLanguage('fr')"><span>🇫🇷</span> Français</button>
-            <button type="button" onclick="setLanguage('es')"><span>🇪🇸</span> Español</button>
-            <button type="button" onclick="setLanguage('it')"><span>🇮🇹</span> Italiano</button>
-            <button type="button" onclick="setLanguage('ru')"><span>🇷🇺</span> Русский</button>
-            <button type="button" onclick="setLanguage('ar')"><span>🇸🇦</span> العربية</button>
-          </div>
-        </div>
-      </nav>
-    </header>
-
-    <!-- HERO SECTION -->
-    <section class="hero-section">
-      <div class="hero-content">
-        <div class="hero-badge">
-          <span data-i18n="hero_badge">⚖️ HUKUKİ ÇÖZÜM &amp; MÜKEMMELİYET</span>
-        </div>
-        <h1 class="hero-title">
-          <span data-i18n="hero_title_1">Haklarınız Güvende, </span><span data-i18n="hero_title_2">Geleceğiniz Teminat Altında</span>
-        </h1>
-        <p class="hero-subtitle" data-i18n="hero_subtitle">
-          Altınbaş Avukatlık Bürosu olarak, 20 yılı aşkın tecrübemiz ve uzman kadromuzla bireysel ve kurumsal müvekkillerimize ulusal ve uluslararası standartlarda hukuki danışmanlık ve temsil hizmeti sağlıyoruz.
-        </p>
-        <div class="hero-actions">
-          <a href="#hizmetler" class="btn-hero-primary" data-i18n="hero_btn_services">Hizmetlerimiz İnceleyin</a>
-          <a href="#iletisim" class="btn-hero-outline" data-i18n="hero_btn_contact">İletişime Geçin</a>
-        </div>
       </div>
-    </section>
-
-    <!-- HERO STATS BAR -->
-    <div class="hero-stats">
-      <div class="stat-card">
-        <div class="stat-number">20+</div>
-        <div class="stat-label" data-i18n="stat_exp">Yıllık Büro Tecrübesi</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">1,500+</div>
-        <div class="stat-label" data-i18n="stat_cases">Başarıyla Tamamlanan Dava</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">%99</div>
-        <div class="stat-label" data-i18n="stat_satisfaction">Müvekkil Memnuniyeti</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">7/24</div>
-        <div class="stat-label" data-i18n="stat_support">Hukuki Destek &amp; Danışmanlık</div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_portal">Müvekkil Portalı</h4>
+        <ul>
+          <li><a href="/login" data-i18n="footer_client_login">Müvekkil Girişi</a></li>
+          <li><a href="/login" data-i18n="footer_lawyer_login">Avukat Girişi</a></li>
+          <li><a href="#iletisim" data-i18n="footer_book">Randevu Al</a></li>
+        </ul>
       </div>
     </div>
+    <div class="footer-bottom">
+      <p>&copy; <%= new Date().getFullYear() %> <span data-i18n="footer_rights">Altınbaş Avukatlık Bürosu. Tüm hakları
+            saklıdır.</span></p>
+    </div>
+  </footer>
 
-    <!-- ABOUT SECTION -->
-    <section id="hakkimizda" class="about-section">
-      <div class="container">
-        <div class="about-left">
-          <span class="section-tag" data-i18n="about_tag">Kurumsal Profilimiz</span>
-          <h2 data-i18n="about_title">Adalet ve Şeffaflık İlkesiyle Yanınızdayız</h2>
-          <p data-i18n="about_p1">
-            Altınbaş Avukat Bürosu, hukukun üstünlüğü ve etik değerler çerçevesinde müvekkillerine en yüksek kalitede hukuki hizmet sunmak amacıyla kurulmuştur. Deneyimli avukat kadromuzla her türlü hukuki süreçte yenilikçi, şeffaf ve sonuç odaklı çözümler üretiyoruz.
-          </p>
-          <p data-i18n="about_p2">
-            Ceza Hukuku, Ticaret Hukuku, Gayrimenkul Hukuku ve İş Hukuku başta olmak üzere geniş bir yelpazede danışmanlık veriyor, dava süreçlerinizi başından sonuna kadar hassasiyetle takip ediyoruz.
-          </p>
-          <div class="contact-info">
-            <a href="tel:+902121234567" data-i18n="about_phone">
-              📞 Doğrudan İletişim: 0212 123 45 67
-            </a>
-          </div>
-        </div>
-        <div class="about-right-grid">
-          <img src="/Fotograflar/hero_law_office.jpg" alt="Altınbaş Avukatlık Bürosu Ofis" />
-        </div>
-      </div>
-    </section>
-
-    <!-- TEAM SECTION -->
-    <section id="ekibimiz" class="team-wrapper">
-      <div class="team-header">
-        <span class="section-tag" style="color: #7BA6CC;" data-i18n="team_tag">Uzman Kadromuz</span>
-        <h2 data-i18n="team_title">Deneyimli Avukat Ekibimiz</h2>
-        <p data-i18n="team_sub">Alanında uzman, dinamik ve disiplinli avukat kadromuzla hukuki haklarınızı en üst düzeyde savunuyoruz.</p>
-      </div>
-
-      <div class="team-section">
-        <a href="/ekip/ahmet-altinbas" class="team-card">
-          <img src="/Fotograflar/lawyer_ahmet.jpg" alt="Av. Ahmet Altınbaş" />
-          <h3 data-i18n="lawyer_name_ahmet_altinbas">Av. Ahmet Altınbaş</h3>
-          <p class="role" data-i18n="lawyer_title_ahmet_altinbas">Kurucu ve Yönetici Avukat</p>
-          <span class="badge" data-i18n="lawyer_badge_ahmet_altinbas">Ticaret &amp; Şirketler Hukuku</span>
-        </a>
-
-        <a href="/ekip/elif-yilmaz" class="team-card">
-          <img src="/Fotograflar/lawyer_elif.jpg" alt="Av. Elif Yılmaz" />
-          <h3 data-i18n="lawyer_name_elif_yilmaz">Av. Elif Yılmaz</h3>
-          <p class="role" data-i18n="lawyer_title_elif_yilmaz">Kıdemli Avukat</p>
-          <span class="badge" data-i18n="lawyer_badge_elif_yilmaz">Ceza &amp; Ağır Ceza Hukuku</span>
-        </a>
-
-        <a href="/ekip/mehmet-demir" class="team-card">
-          <img src="/Fotograflar/lawyer_mehmet.jpg" alt="Av. Mehmet Demir" />
-          <h3 data-i18n="lawyer_name_mehmet_demir">Av. Mehmet Demir</h3>
-          <p class="role" data-i18n="lawyer_title_mehmet_demir">Uzman Avukat</p>
-          <span class="badge" data-i18n="lawyer_badge_mehmet_demir">İş &amp; Sosyal Güvenlik Hukuku</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- SERVICES SECTION -->
-    <section id="hizmetler" class="services-wrapper">
-      <div class="services-header">
-        <span class="section-tag" data-i18n="services_tag">Faaliyet Alanlarımız</span>
-        <h2 data-i18n="services_title">Hukuki Hizmetlerimiz</h2>
-        <p data-i18n="services_sub">Geniş bir alana yayılan uzmanlık alanlarımız ile bireysel ve kurumsal ihtiyaçlarınıza özel çözümler sunuyoruz.</p>
-      </div>
-
-      <div class="cards">
-        <div class="card">
-          <div class="icon-box">⚖️</div>
-          <h3 class="card-title" data-i18n="service_1_title">Hukuki Danışmanlık</h3>
-          <p data-i18n="service_1_desc">Müvekkillerimize stratejik kararlarında riskleri en aza indiren sürekli hukuki danışmanlık sağlıyoruz.</p>
-        </div>
-
-        <div class="card">
-          <div class="icon-box">📄</div>
-          <h3 class="card-title" data-i18n="service_2_title">Dava Takibi &amp; Savunma</h3>
-          <p data-i18n="service_2_desc">Tüm adli ve idari yargı mertebelerinde davalarınızı titizlikle takip ediyor ve haklarınızı koruyoruz.</p>
-        </div>
-
-        <div class="card">
-          <div class="icon-box">🤝</div>
-          <h3 class="card-title" data-i18n="service_3_title">Arabuluculuk &amp; Uzlaşma</h3>
-          <p data-i18n="service_3_desc">Uyuşmazlıkların mahkeme sürecine gitmeden hızlı, maliyetsiz ve dostane çözümü için arabuluculuk yapıyoruz.</p>
-        </div>
-      </div>
-
-      <div class="cards">
-        <div class="card">
-          <div class="icon-box">🏛️</div>
-          <h3 class="card-title" data-i18n="service_4_title">Ticaret &amp; Şirketler Hukuku</h3>
-          <p data-i18n="service_4_desc">Şirket kuruluşları, birleşme-devralma, sözleşme müzakereleri ve kurumsal yönetim süreçlerinde tam destek.</p>
-        </div>
-
-        <div class="card">
-          <div class="icon-box">📚</div>
-          <h3 class="card-title" data-i18n="service_5_title">Sözleşmeler Hukuku</h3>
-          <p data-i18n="service_5_desc">Uluslararası ve yerel her türlü ticari sözleşmenin hazırlanması, revize edilmesi ve risk analizleri.</p>
-        </div>
-
-        <div class="card">
-          <div class="icon-box">🛡️</div>
-          <h3 class="card-title" data-i18n="service_6_title">Önleyici Hukuk Desteği</h3>
-          <p data-i18n="service_6_desc">Olası uyuşmazlıklar ortaya çıkmadan önce hukuki altyapının güçlendirilmesi ve hak kayıplarının önlenmesi.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT SECTION -->
-    <section id="iletisim" class="contact-wrapper">
-      <div class="contact-container">
-        <div class="contact-about-left">
-          <span class="section-tag" data-i18n="contact_tag">Bize Ulaşın</span>
-          <h2 data-i18n="contact_title">İletişim &amp; Ofis Bilgileri</h2>
-          
-          <div class="contact-item">
-            <div class="contact-icon">📍</div>
-            <div class="contact-detail">
-              <h4 data-i18n="contact_address_lbl">Adres</h4>
-              <p data-i18n="contact_address_val">Altınbaş Plaza, No: 42, Levent / İstanbul, Türkiye</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-icon">📞</div>
-            <div class="contact-detail">
-              <h4 data-i18n="contact_phone_lbl">Telefon</h4>
-              <p data-i18n="contact_phone_val">0212 123 45 67 (Santral)</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-icon">✉️</div>
-            <div class="contact-detail">
-              <h4 data-i18n="contact_email_lbl">E-posta</h4>
-              <p>bilgi@altinbasavukat.com</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="contact-icon">🕒</div>
-            <div class="contact-detail">
-              <h4 data-i18n="contact_hours_lbl">Çalışma Saatleri</h4>
-              <p data-i18n="contact_hours_val">Pazartesi - Cuma: 09:00 - 18:30</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="map-container">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3126.5926427206646!2d27.108041775913094!3d38.404666871833356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzjCsDI0JzE2LjgiTiAyN8KwMDYnMzguMiJF!5e0!3m2!1sen!2str!4v1782391006251!5m2!1sen!2str"
-            loading="lazy"
-            title="Altınbaş Avukatlık Bürosu Konumu"
-          ></iframe>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <img src="/Fotograflar/altinbas-logo.svg" alt="Altınbaş Avukatlık Bürosu" style="height: 48px; margin-bottom: 16px; filter: brightness(0) invert(1);" />
-          <p data-i18n="footer_desc">Altınbaş Avukatlık &amp; Danışmanlık Bürosu, şeffaflık, dürüstlük ve hukuki mükemmeliyet prensipleri doğrultusunda hizmet vermektedir.</p>
-        </div>
-        <div class="footer-col">
-          <h4 data-i18n="footer_quick_links">Hızlı Bağlantılar</h4>
-          <ul>
-            <li><a href="/" data-i18n="nav_home">Anasayfa</a></li>
-            <li><a href="#hakkimizda" data-i18n="nav_about">Hakkımızda</a></li>
-            <li><a href="#ekibimiz" data-i18n="nav_team">Ekibimiz</a></li>
-            <li><a href="#hizmetler" data-i18n="nav_services">Hizmetlerimiz</a></li>
-            <li><a href="#iletisim" data-i18n="nav_contact">İletişim</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4 data-i18n="footer_portal">Müvekkil Portalı</h4>
-          <ul>
-            <li><a href="/login" data-i18n="footer_client_login">Müvekkil Girişi</a></li>
-            <li><a href="/login" data-i18n="footer_lawyer_login">Avukat Girişi</a></li>
-            <li><a href="#iletisim" data-i18n="footer_book">Randevu Al</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; <%= new Date().getFullYear() %> <span data-i18n="footer_rights">Altınbaş Avukatlık Bürosu. Tüm hakları saklıdır.</span></p>
-      </div>
-    </footer>
-
-    <!-- SMOOTH SCROLL SCRIPT -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        function getTargetPosition(hash) {
-          if (!hash || hash === "#") return null;
-          const target = document.querySelector(hash);
-          if (target) {
-            const navbarHeight = document.querySelector(".navbar")?.offsetHeight || 80;
-            return target.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 15;
-          }
-          return null;
+  <!-- SMOOTH SCROLL SCRIPT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      function getTargetPosition(hash) {
+        if (!hash || hash === "#") return null;
+        const target = document.querySelector(hash);
+        if (target) {
+          const navbarHeight = document.querySelector(".navbar")?.offsetHeight || 80;
+          return target.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 15;
         }
+        return null;
+      }
 
-        function scrollToHash(hash) {
-          const pos = getTargetPosition(hash);
-          if (pos !== null) {
-            window.scrollTo({
-              top: Math.max(0, pos),
-              behavior: "smooth"
-            });
-          }
-        }
-
-        // Intercept anchor link clicks
-        document.querySelectorAll('a[href*="#"]').forEach(function (anchor) {
-          anchor.addEventListener("click", function (e) {
-            const href = this.getAttribute("href");
-            if (!href) return;
-            
-            const parts = href.split("#");
-            const path = parts[0];
-            const hash = parts[1] ? "#" + parts[1] : "";
-
-            // Same-page smooth scroll
-            if (path === "" || path === "/" || path === window.location.pathname) {
-              if (hash) {
-                e.preventDefault();
-                scrollToHash(hash);
-                history.pushState(null, null, hash);
-              }
-            }
+      function scrollToHash(hash) {
+        const pos = getTargetPosition(hash);
+        if (pos !== null) {
+          window.scrollTo({
+            top: Math.max(0, pos),
+            behavior: "smooth"
           });
-        });
-
-        // Handle page load with hash (e.g. from /ekip/ahmet-altinbas#hizmetler)
-        if (window.location.hash) {
-          setTimeout(function () {
-            scrollToHash(window.location.hash);
-          }, 250);
         }
-      });
-    </script>
+      }
 
-    <%- include('partials/chat-bar') %>
+      // Intercept anchor link clicks
+      document.querySelectorAll('a[href*="#"]').forEach(function (anchor) {
+        anchor.addEventListener("click", function (e) {
+          const href = this.getAttribute("href");
+          if (!href) return;
+
+          const parts = href.split("#");
+          const path = parts[0];
+          const hash = parts[1] ? "#" + parts[1] : "";
+
+          // Same-page smooth scroll
+          if (path === "" || path === "/" || path === window.location.pathname) {
+            if (hash) {
+              e.preventDefault();
+              scrollToHash(hash);
+              history.pushState(null, null, hash);
+            }
+          }
+        });
+      });
+
+      // Handle page load with hash (e.g. from /ekip/ahmet-altinbas#hizmetler)
+      if (window.location.hash) {
+        setTimeout(function () {
+          scrollToHash(window.location.hash);
+        }, 250);
+      }
+    });
+  </script>
+
+  <%- include('partials/chat-bar') %>
     <!-- I18N JS ENGINE -->
     <script src="/JS/i18n.js"></script>
-  </body>
+</body>
+
 </html>

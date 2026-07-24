@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\config",
+    "\\db",
+    "\\db\\models",
+    "\\routes",
+    "\\views",
+    "\\views\\ekip"
+  ],
+  "SelectedNode": "\\views\\ekip\\profile.ejs",
+  "PreviewInSolutionExplorer": false
+}
